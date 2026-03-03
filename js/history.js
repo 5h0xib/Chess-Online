@@ -84,7 +84,7 @@ function renderTable(games) {
         const colorClass = `color-${g.myColor}`;
         const colorLabel = g.myColor.charAt(0).toUpperCase() + g.myColor.slice(1);
         const dateStr = g.date.toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
-        return `<tr onclick="window.location='/game.html?view=${g.id}'" title="View game">
+        return `<tr onclick="window.location='/Chess-Online/game.html?view=${g.id}'" title="View game">
             <td><strong>${escHtml(g.opponent)}</strong></td>
             <td><span class="${colorClass}">${colorLabel}</span></td>
             <td><span class="${resultClass}">${resultLabel}</span></td>
@@ -122,7 +122,7 @@ function setupFilters() {
 function setupLogout() {
     document.getElementById('logoutBtn')?.addEventListener('click', async () => {
         await Auth.signOut();
-        window.location.href = 'index.html';
+        window.location.href = '/Chess-Online/index.html';
     });
 }
 

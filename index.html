@@ -139,7 +139,7 @@
             btn.classList.add('btn-loading');
             try {
                 await Auth.signIn(email, password);
-                window.location.href = 'dashboard.html';
+                window.location.href = '/Chess-Online/dashboard.html';
             } catch (e) {
                 showError('loginError', e.message || 'Login failed. Check your credentials.');
             } finally {

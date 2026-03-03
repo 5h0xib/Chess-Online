@@ -89,7 +89,7 @@ async function loadFriendsSidebar() {
         if (!data?.length) {
             list.innerHTML = `<div class="empty-state" style="padding:20px">
                 <div class="icon">👥</div><h3>No friends yet</h3>
-                <p><a href="friends.html" style="color:var(--accent-purple-light)">Find friends →</a></p>
+                <p><a href="/Chess-Online/friends.html" style="color:var(--accent-purple-light)">Find friends →</a></p>
             </div>`;
             return;
         }
@@ -147,7 +147,7 @@ async function loadRecentGames() {
                 resultLabel = won ? 'Win' : 'Loss';
             }
             const date = new Date(g.created_at).toLocaleDateString();
-            return `<div class="game-row" onclick="window.location='game.html?view=${g.id}'">
+            return `<div class="game-row" onclick="window.location='/Chess-Online/game.html?view=${g.id}'">
                 <div class="game-icon">♟️</div>
                 <div class="game-info">
                     <div class="game-opponent">vs ${escHtml(oppName || 'Unknown')}</div>
@@ -173,20 +173,20 @@ function subscribeToOnlineStatus() {
 // ===== ACTIONS =====
 function setupActions() {
     document.getElementById('btnPlayComputer')?.addEventListener('click', () => {
-        window.location.href = 'game.html?mode=pvc';
+        window.location.href = '/Chess-Online/game.html?mode=pvc';
     });
     document.getElementById('btnChallengeFriend')?.addEventListener('click', () => {
-        window.location.href = 'friends.html';
+        window.location.href = '/Chess-Online/friends.html';
     });
     document.getElementById('btnFriends')?.addEventListener('click', () => {
-        window.location.href = 'friends.html';
+        window.location.href = '/Chess-Online/friends.html';
     });
     document.getElementById('btnHistory')?.addEventListener('click', () => {
-        window.location.href = 'history.html';
+        window.location.href = '/Chess-Online/history.html';
     });
     document.getElementById('logoutBtn')?.addEventListener('click', async () => {
         await Auth.signOut();
-        window.location.href = 'index.html';
+        window.location.href = '/Chess-Online/index.html';
     });
 }
 
