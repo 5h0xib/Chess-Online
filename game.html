@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chess Online – Play a live chess match against a friend or the AI.">
+    <title>Game – Chess Online</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/game.css">
+</head>
+
+<body class="game-page">
+
+    <div class="page-loader" id="pageLoader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Nav -->
+    <nav class="topnav">
+        <a href="/dashboard.html" class="nav-logo">♚ CHESS ONLINE</a>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-link"><span>🏠</span><span>Dashboard</span></a>
+            <a href="/friends.html" class="nav-link"><span>👥</span><span>Friends</span></a>
+        </div>
+        <div class="nav-user">
+            <button class="btn btn-danger btn-sm hidden" id="resignBtn">🏳️ Resign</button>
+            <button class="btn btn-ghost btn-sm" onclick="window.location='/dashboard.html'">← Back</button>
+        </div>
+    </nav>
+
+    <main class="game-main">
+
+        <!-- Game Mode Selector (local only) -->
+        <div class="game-mode-selector" id="gameModeSelector" style="display:none">
+            <div class="mode-section">
+                <h3>Game Mode</h3>
+                <div class="mode-options">
+                    <label class="mode-option">
+                        <input type="radio" name="gameMode" value="pvp" checked>
+                        <span>Player vs Player</span>
+                    </label>
+                    <label class="mode-option">
+                        <input type="radio" name="gameMode" value="pvc">
+                        <span>vs Computer</span>
+                    </label>
+                </div>
+            </div>
+            <div class="difficulty-section" id="difficultySection" style="display:none">
+                <h3>Difficulty</h3>
+                <div class="difficulty-options">
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="easy">
+                        <span>Easy</span>
+                    </label>
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="medium" checked>
+                        <span>Medium</span>
+                    </label>
+                    <label class="difficulty-option">
+                        <input type="radio" name="difficulty" value="hard">
+                        <span>Hard</span>
+                    </label>
+                </div>
+            </div>
+        </div>
+
+        <!-- Player Panels -->
+        <div class="players-bar">
+            <div class="player-panel white-panel" id="whitePanel">
+                <div class="piece-color-dot"></div>
+                <div class="pp-info">
+                    <div class="pp-name">White</div>
+                    <div class="pp-label">White Player</div>
+                </div>
+                <span class="pp-turn-badge" id="whiteTurnBadge">Your Turn</span>
+            </div>
+            <div class="vs-badge">VS</div>
+            <div class="player-panel black-panel" id="blackPanel">
+                <div class="piece-color-dot"></div>
+                <div class="pp-info">
+                    <div class="pp-name">Black</div>
+                    <div class="pp-label">Black Player</div>
+                </div>
+                <span class="pp-turn-badge" id="blackTurnBadge" style="display:none">Your Turn</span>
+            </div>
+        </div>
+
+        <!-- Game Status Alert -->
+        <div id="gameAlerts"></div>
+
+        <!-- Board + Sidebar -->
+        <div class="board-container">
+            <div class="board-wrap">
+                <!-- File labels top -->
+                <div class="file-labels" id="fileLabelsTop">
+                    <span class="file-label">a</span><span class="file-label">b</span>
+                    <span class="file-label">c</span><span class="file-label">d</span>
+                    <span class="file-label">e</span><span class="file-label">f</span>
+                    <span class="file-label">g</span><span class="file-label">h</span>
+                </div>
+
+                <div class="board-coords-wrap">
+                    <!-- Rank labels -->
+                    <div class="rank-labels" id="rankLabels">
+                        <span class="rank-label">8</span><span class="rank-label">7</span>
+                        <span class="rank-label">6</span><span class="rank-label">5</span>
+                        <span class="rank-label">4</span><span class="rank-label">3</span>
+                        <span class="rank-label">2</span><span class="rank-label">1</span>
+                    </div>
+                    <!-- Board -->
+                    <div id="chessboard"></div>
+                </div>
+
+                <!-- Status bar below board -->
+                <div class="game-status-display white-turn" id="gameStatus" style="width:512px;max-width:100%">
+                    Turn: <span id="currentTurn">White</span>
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <aside class="game-sidebar">
+                <div class="sidebar-card card">
+                    <h3>Move History</h3>
+                    <div class="move-history-list" id="moveHistoryList"></div>
+                </div>
+                <div class="sidebar-card card" style="display:flex;flex-direction:column;gap:8px;">
+                    <button class="btn btn-ghost btn-full" id="resetBtn">🔄 New Game</button>
+                    <a href="/history.html" class="btn btn-ghost btn-full" style="text-align:center">📜 History</a>
+                </div>
+                <div class="sidebar-card card">
+                    <p style="font-size:0.8rem;color:var(--text-muted);text-align:center;">
+                        Click a piece to select, then click a highlighted square to move.
+                    </p>
+                </div>
+            </aside>
+        </div>
+
+    </main>
+
+    <!-- Promotion Modal -->
+    <div class="modal-overlay" id="promotionOverlay">
+        <div class="modal" id="promotionModal">
+            <div class="modal-header">
+                <span class="modal-title">♟️ Promote Pawn</span>
+            </div>
+            <p style="color:var(--text-secondary);font-size:0.9rem;margin-bottom:4px;">Choose a piece for your promoted
+                pawn:</p>
+            <div class="promotion-options"></div>
+        </div>
+    </div>
+
+    <!-- Game Over Overlay -->
+    <div class="modal-overlay" id="gameOverOverlay">
+        <div class="modal" style="text-align:center;">
+            <div style="font-size:3rem;margin-bottom:12px;">♚</div>
+            <div class="result-text" style="font-size:1.8rem;font-weight:800;margin-bottom:12px;"></div>
+            <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;">
+                <a href="/dashboard.html" class="btn btn-primary">🏠 Dashboard</a>
+                <a href="/history.html" class="btn btn-ghost">📜 History</a>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/chess-engine.js"></script>
+    <script src="js/game.js"></script>
+    <script>
+        OnlineGame.initGame();
+
+        // Show resign button for online games
+        const params = new URLSearchParams(window.location.search);
+        if (params.get('gameId')) {
+            document.getElementById('resignBtn').classList.remove('hidden');
+        }
+    </script>
+</body>
+
+</html>

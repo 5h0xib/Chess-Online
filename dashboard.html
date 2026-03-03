@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chess Online Dashboard – View your stats, friends, and recent games.">
+    <title>Dashboard – Chess Online</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/dashboard.css">
+</head>
+
+<body class="dashboard-page">
+
+    <!-- Page Loader -->
+    <div class="page-loader" id="pageLoader">
+        <div class="spinner"></div>
+    </div>
+
+    <!-- Top Nav -->
+    <nav class="topnav">
+        <a href="/dashboard.html" class="nav-logo">♚ CHESS ONLINE</a>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-link active"><span>🏠</span><span>Dashboard</span></a>
+            <a href="/friends.html" class="nav-link"><span>👥</span><span>Friends</span></a>
+            <a href="/history.html" class="nav-link"><span>📜</span><span>History</span></a>
+        </div>
+        <div class="nav-user">
+            <div class="avatar avatar-sm" id="navAvatar">?</div>
+            <span style="font-size:0.9rem;font-weight:600;" id="navUsername"></span>
+            <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign Out</button>
+        </div>
+    </nav>
+
+    <main class="dashboard-main">
+
+        <!-- Welcome Banner -->
+        <div class="welcome-banner card">
+            <div class="welcome-text">
+                <h2 id="welcomeName">Welcome back! 👋</h2>
+                <p>Ready for your next match? Challenge a friend or train against the AI.</p>
+            </div>
+            <div class="welcome-actions">
+                <button class="btn btn-primary" id="btnPlayComputer">🤖 vs Computer</button>
+                <button class="btn btn-gold" id="btnChallengeFriend">⚔️ Challenge Friend</button>
+            </div>
+        </div>
+
+        <!-- Stats Row -->
+        <div class="stats-row">
+            <div class="stat-card card">
+                <div class="stat-value" id="statWins">—</div>
+                <div class="stat-label">Wins</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-value" id="statLosses">—</div>
+                <div class="stat-label">Losses</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-value" id="statDraws">—</div>
+                <div class="stat-label">Draws</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-value" id="statFriends">—</div>
+                <div class="stat-label">Friends</div>
+            </div>
+        </div>
+
+        <!-- Content Grid -->
+        <div class="content-grid">
+
+            <!-- Left: Recent Games + Quick Play -->
+            <div style="display:flex;flex-direction:column;gap:20px;">
+                <!-- Quick Play -->
+                <div class="section-card card">
+                    <div class="section-header">
+                        <div class="section-title"><span class="icon">⚡</span>Quick Play</div>
+                    </div>
+                    <div class="play-options">
+                        <button class="play-option" id="btnPlayComputer2"
+                            onclick="document.getElementById('btnPlayComputer').click()">
+                            <div class="po-icon">🤖</div>
+                            <div class="po-text">
+                                <h4>vs Computer</h4>
+                                <p>Practice against AI (Easy / Medium / Hard)</p>
+                            </div>
+                        </button>
+                        <button class="play-option" onclick="window.location='/friends.html'">
+                            <div class="po-icon">⚔️</div>
+                            <div class="po-text">
+                                <h4>Challenge a Friend</h4>
+                                <p>Send a chess challenge to any friend</p>
+                            </div>
+                        </button>
+                        <button class="play-option" onclick="window.location='/history.html'">
+                            <div class="po-icon">📜</div>
+                            <div class="po-text">
+                                <h4>Game History</h4>
+                                <p>Review your past games</p>
+                            </div>
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Recent Games -->
+                <div class="section-card card">
+                    <div class="section-header">
+                        <div class="section-title"><span class="icon">🕹️</span>Recent Games</div>
+                        <a href="/history.html" class="btn btn-ghost btn-sm">View All</a>
+                    </div>
+                    <div id="recentGames">
+                        <div class="empty-state" style="padding:20px">
+                            <div class="icon">⏳</div>
+                            <h3>Loading...</h3>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right: Friends Sidebar -->
+            <div class="section-card card">
+                <div class="section-header">
+                    <div class="section-title"><span class="icon">👥</span>Friends</div>
+                    <a href="/friends.html" class="btn btn-ghost btn-sm">Manage</a>
+                </div>
+                <div id="friendsSidebar">
+                    <div class="empty-state" style="padding:20px">
+                        <div class="icon">⏳</div>
+                        <h3>Loading...</h3>
+                    </div>
+                </div>
+            </div>
+
+        </div><!-- /content-grid -->
+    </main>
+
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/dashboard.js"></script>
+    <script>
+        DashboardModule.initDashboard();
+    </script>
+</body>
+
+</html>

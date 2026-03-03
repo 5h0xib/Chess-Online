@@ -1,0 +1,287 @@
+/* ===== DASHBOARD CSS ===== */
+.dashboard-page {
+    min-height: 100vh;
+}
+
+.dashboard-main {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+}
+
+/* ===== HERO WELCOME ===== */
+.welcome-banner {
+    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.10));
+    border: 1px solid rgba(139, 92, 246, 0.25);
+    border-radius: var(--radius-xl);
+    padding: 28px 32px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    flex-wrap: wrap;
+}
+
+.welcome-text h2 {
+    font-size: 1.8rem;
+    font-weight: 800;
+    background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.welcome-text p {
+    color: var(--text-secondary);
+    margin-top: 6px;
+}
+
+.welcome-actions {
+    display: flex;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+/* ===== STATS ROW ===== */
+.stats-row {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+    gap: 16px;
+}
+
+.stat-card {
+    padding: 20px;
+    text-align: center;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-lg);
+    transition: var(--transition);
+}
+
+.stat-card:hover {
+    background: var(--surface-hover);
+    transform: translateY(-3px);
+    border-color: var(--border-focus);
+}
+
+.stat-value {
+    font-size: 2rem;
+    font-weight: 800;
+    line-height: 1.1;
+    background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.stat-label {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 4px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    font-weight: 600;
+}
+
+/* ===== CONTENT GRID ===== */
+.content-grid {
+    display: grid;
+    grid-template-columns: 1fr 340px;
+    gap: 24px;
+    align-items: start;
+}
+
+@media (max-width: 900px) {
+    .content-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* ===== SECTION CARDS ===== */
+.section-card {
+    padding: 24px;
+}
+
+.section-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 20px;
+}
+
+.section-title {
+    font-size: 1.05rem;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.section-title .icon {
+    font-size: 1.2rem;
+}
+
+/* ===== FRIEND LIST (dashboard sidebar) ===== */
+.friend-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    cursor: default;
+}
+
+.friend-item:hover {
+    background: var(--surface-hover);
+}
+
+.friend-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.friend-name {
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-status {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+.friend-actions {
+    display: flex;
+    gap: 6px;
+}
+
+/* ===== RECENT GAMES LIST ===== */
+.game-row {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 12px;
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+    cursor: pointer;
+}
+
+.game-row:hover {
+    background: var(--surface-hover);
+}
+
+.game-icon {
+    font-size: 1.6rem;
+}
+
+.game-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.game-opponent {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.game-meta {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+.game-result {
+    font-weight: 700;
+    font-size: 0.85rem;
+}
+
+.game-result.win {
+    color: var(--accent-green);
+}
+
+.game-result.loss {
+    color: var(--accent-red);
+}
+
+.game-result.draw {
+    color: var(--text-secondary);
+}
+
+/* ===== QUICK PLAY CARD ===== */
+.play-options {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.play-option {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding: 16px;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    background: var(--surface);
+    transition: var(--transition);
+    text-align: left;
+    width: 100%;
+}
+
+.play-option:hover {
+    background: var(--surface-hover);
+    border-color: var(--border-focus);
+    transform: translateX(4px);
+}
+
+.play-option .po-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.play-option .po-text h4 {
+    font-weight: 700;
+    font-size: 0.95rem;
+}
+
+.play-option .po-text p {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 2px;
+}
+
+/* ===== NOTIFICATION BADGE ===== */
+.notif-badge {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 20px;
+    height: 20px;
+    background: var(--accent-red);
+    border-radius: 50%;
+    font-size: 0.72rem;
+    font-weight: 700;
+    color: #fff;
+    line-height: 1;
+}
+
+@media (max-width: 600px) {
+    .dashboard-main {
+        padding: 20px 16px;
+    }
+
+    .welcome-banner {
+        padding: 20px;
+    }
+
+    .welcome-text h2 {
+        font-size: 1.4rem;
+    }
+}

@@ -1,0 +1,188 @@
+/* ===== FRIENDS PAGE CSS ===== */
+.friends-page {
+    min-height: 100vh;
+}
+
+.friends-main {
+    max-width: 860px;
+    margin: 0 auto;
+    padding: 32px 24px;
+    display: flex;
+    flex-direction: column;
+    gap: 24px;
+}
+
+.page-heading {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.page-heading h1 {
+    font-size: 1.7rem;
+    font-weight: 800;
+}
+
+/* ===== SEARCH BAR ===== */
+.search-section {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+}
+
+.search-wrap {
+    position: relative;
+    flex: 1;
+}
+
+.search-wrap input {
+    width: 100%;
+    padding: 12px 16px 12px 44px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    color: var(--text-primary);
+    font-family: inherit;
+    font-size: 0.95rem;
+    outline: none;
+    transition: var(--transition);
+}
+
+.search-wrap input:focus {
+    border-color: var(--border-focus);
+    background: var(--surface-hover);
+    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
+}
+
+.search-wrap input::placeholder {
+    color: var(--text-muted);
+}
+
+.search-icon {
+    position: absolute;
+    left: 14px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-muted);
+    font-size: 1.1rem;
+    pointer-events: none;
+}
+
+/* ===== SEARCH RESULTS DROPDOWN ===== */
+.search-results {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    right: 0;
+    background: #1a1730;
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    box-shadow: var(--shadow-lg);
+    z-index: 200;
+    max-height: 260px;
+    overflow-y: auto;
+}
+
+.search-result-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 12px 16px;
+    cursor: default;
+    transition: var(--transition);
+}
+
+.search-result-item:hover {
+    background: var(--surface-hover);
+}
+
+.search-result-item .sname {
+    font-weight: 600;
+    font-size: 0.9rem;
+}
+
+.search-result-item .semail {
+    font-size: 0.78rem;
+    color: var(--text-muted);
+}
+
+/* ===== TABS ===== */
+.friends-tabs-wrap {
+    margin-bottom: 4px;
+}
+
+/* ===== FRIEND CARD ===== */
+.friends-list {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.friend-card {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    padding: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-md);
+    transition: var(--transition);
+}
+
+.friend-card:hover {
+    background: var(--surface-hover);
+    border-color: rgba(255, 255, 255, 0.15);
+}
+
+.fc-info {
+    flex: 1;
+    min-width: 0;
+}
+
+.fc-name {
+    font-weight: 700;
+    font-size: 0.95rem;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.fc-meta {
+    font-size: 0.8rem;
+    color: var(--text-muted);
+    margin-top: 3px;
+}
+
+.fc-actions {
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    flex-shrink: 0;
+    flex-wrap: wrap;
+}
+
+/* ===== PENDING BADGE ===== */
+.pending-label {
+    font-size: 0.75rem;
+    font-weight: 600;
+    padding: 3px 10px;
+    background: rgba(245, 158, 11, 0.15);
+    color: var(--accent-gold-light);
+    border-radius: 99px;
+}
+
+@media (max-width: 600px) {
+    .friends-main {
+        padding: 20px 16px;
+    }
+
+    .friend-card {
+        flex-wrap: wrap;
+    }
+
+    .fc-actions {
+        width: 100%;
+    }
+}

@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chess Online – View your game history and past matches.">
+    <title>History – Chess Online</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/history.css">
+</head>
+
+<body class="history-page">
+
+    <div class="page-loader" id="pageLoader">
+        <div class="spinner"></div>
+    </div>
+
+    <nav class="topnav">
+        <a href="/dashboard.html" class="nav-logo">♚ CHESS ONLINE</a>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-link"><span>🏠</span><span>Dashboard</span></a>
+            <a href="/friends.html" class="nav-link"><span>👥</span><span>Friends</span></a>
+            <a href="/history.html" class="nav-link active"><span>📜</span><span>History</span></a>
+        </div>
+        <div class="nav-user">
+            <div class="avatar avatar-sm" id="navAvatar">?</div>
+            <span style="font-size:0.9rem;font-weight:600;" id="navUsername"></span>
+            <button class="btn btn-ghost btn-sm" id="logoutBtn">Sign Out</button>
+        </div>
+    </nav>
+
+    <main class="history-main">
+
+        <div class="page-heading">
+            <h1>📜 Game History</h1>
+            <a href="/dashboard.html" class="btn btn-ghost btn-sm">← Dashboard</a>
+        </div>
+
+        <!-- Summary Stats -->
+        <div class="stats-row" style="display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:14px;">
+            <div class="stat-card card">
+                <div class="stat-value" id="totalGames">—</div>
+                <div class="stat-label">Total Games</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-value" id="totalWins"
+                    style="background:linear-gradient(135deg,#22c55e,#16a34a);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+                    —</div>
+                <div class="stat-label">Wins</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-value" id="totalLosses"
+                    style="background:linear-gradient(135deg,#ef4444,#dc2626);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+                    —</div>
+                <div class="stat-label">Losses</div>
+            </div>
+            <div class="stat-card card">
+                <div class="stat-value" id="totalDraws"
+                    style="background:linear-gradient(135deg,#94a3b8,#64748b);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text">
+                    —</div>
+                <div class="stat-label">Draws</div>
+            </div>
+        </div>
+
+        <!-- Filter Buttons -->
+        <div class="filter-bar">
+            <button class="filter-btn active" data-filter="all">All Games</button>
+            <button class="filter-btn" data-filter="win">Wins 🏆</button>
+            <button class="filter-btn" data-filter="loss">Losses 💀</button>
+            <button class="filter-btn" data-filter="draw">Draws 🤝</button>
+        </div>
+
+        <!-- Table -->
+        <div class="history-table-wrap">
+            <table class="history-table">
+                <thead>
+                    <tr>
+                        <th>Opponent</th>
+                        <th>Color</th>
+                        <th>Result</th>
+                        <th>Moves</th>
+                        <th>Date</th>
+                    </tr>
+                </thead>
+                <tbody id="historyTbody">
+                    <tr>
+                        <td colspan="5">
+                            <div class="empty-state" style="padding:40px">
+                                <div class="icon">⏳</div>
+                                <h3>Loading...</h3>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/history.js"></script>
+    <script>
+        HistoryModule.initHistory();
+    </script>
+</body>
+
+</html>

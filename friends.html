@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Chess Online – Manage your friends, send and accept friend requests.">
+    <title>Friends – Chess Online</title>
+    <link rel="stylesheet" href="css/base.css">
+    <link rel="stylesheet" href="css/friends.css">
+</head>
+
+<body class="friends-page">
+
+    <div class="page-loader" id="pageLoader">
+        <div class="spinner"></div>
+    </div>
+
+    <nav class="topnav">
+        <a href="/dashboard.html" class="nav-logo">♚ CHESS ONLINE</a>
+        <div class="nav-links">
+            <a href="/dashboard.html" class="nav-link"><span>🏠</span><span>Dashboard</span></a>
+            <a href="/friends.html" class="nav-link active"><span>👥</span><span>Friends</span></a>
+            <a href="/history.html" class="nav-link"><span>📜</span><span>History</span></a>
+        </div>
+        <div class="nav-user">
+            <div class="avatar avatar-sm" id="navAvatar">?</div>
+            <span style="font-size:0.9rem;font-weight:600;" id="navUsername"></span>
+            <button class="btn btn-ghost btn-sm" id="logoutBtn"
+                onclick="Auth.signOut().then(()=>window.location='/index.html')">Sign Out</button>
+        </div>
+    </nav>
+
+    <main class="friends-main">
+
+        <div class="page-heading">
+            <h1>👥 Friends</h1>
+            <span class="badge badge-purple" id="pendingBadge" style="display:none">0 pending</span>
+        </div>
+
+        <!-- Search -->
+        <div class="search-section">
+            <div class="search-wrap">
+                <span class="search-icon">🔍</span>
+                <input type="text" id="searchInput" placeholder="Search users by username…" autocomplete="off">
+                <div class="search-results" id="searchResults" style="display:none"></div>
+            </div>
+        </div>
+
+        <!-- Tabs -->
+        <div class="tabs friends-tabs-wrap">
+            <button class="tab-btn active" data-tab="friendsPanel">My Friends</button>
+            <button class="tab-btn" data-tab="receivedPanel">
+                Received
+                <span id="pendingBadge"
+                    style="margin-left:4px;background:var(--accent-red);color:#fff;border-radius:99px;padding:1px 7px;font-size:0.75rem"></span>
+            </button>
+            <button class="tab-btn" data-tab="sentPanel">Sent</button>
+        </div>
+
+        <!-- My Friends -->
+        <div class="tab-panel active" id="friendsPanel">
+            <div class="friends-list" id="friendsList">
+                <div class="empty-state">
+                    <div class="icon">⏳</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Received Requests -->
+        <div class="tab-panel" id="receivedPanel">
+            <div class="friends-list" id="receivedList">
+                <div class="empty-state">
+                    <div class="icon">⏳</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Sent Requests -->
+        <div class="tab-panel" id="sentPanel">
+            <div class="friends-list" id="sentList">
+                <div class="empty-state">
+                    <div class="icon">⏳</div>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <div id="toast-container"></div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/notifications.js"></script>
+    <script src="js/friends.js"></script>
+    <script>
+        (async () => {
+            const auth = await Auth.requireAuth();
+            if (!auth) return;
+            document.getElementById('navUsername').textContent = auth.profile.username;
+            document.getElementById('navAvatar').textContent = auth.profile.username[0].toUpperCase();
+            await FriendsModule.initFriends(auth.user.id);
+            const loader = document.getElementById('pageLoader');
+            loader.classList.add('hidden');
+            setTimeout(() => loader.remove(), 500);
+        })();
+    </script>
+</body>
+
+</html>
