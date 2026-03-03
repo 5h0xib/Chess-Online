@@ -212,14 +212,28 @@ function setupSearchBar() {
     input.addEventListener('input', () => {
         clearTimeout(debounceTimer);
         const q = input.value.trim();
-        if (q.length < 2) { results.innerHTML = ''; results.style.display = 'none'; return; }
+        if (q.length < 2) {
+            results.innerHTML = '';
+            results.style.display = 'none';
+            return;
+        }
+        // Show loading state immediately
+        results.innerHTML = `<div class="search-result-item"><span style="color:var(--text-muted)">🔍 Searching...</span></div>`;
+        results.style.display = 'block';
         debounceTimer = setTimeout(() => searchUsers(q), 350);
     });
 
-    document.addEventListener('click', (e) => {
+    // Use mousedown instead of click so the dropdown is not hidden
+    // before the button's onclick fires (click fires after mousedown + mouseup)
+    document.addEventListener('mousedown', (e) => {
         if (!input.contains(e.target) && !results.contains(e.target)) {
             results.style.display = 'none';
         }
+    });
+
+    // Also hide on Escape key
+    input.addEventListener('keydown', (e) => {
+        if (e.key === 'Escape') { results.style.display = 'none'; input.blur(); }
     });
 }
 
@@ -255,15 +269,27 @@ async function searchUsers(query) {
 
 async function sendFriendRequest(targetId, targetName) {
     try {
-        // Check if already friends or request pending
-        const { data: existing } = await sb
-            .from('friend_requests')
-            .select('id, status')
-            .or(`and(sender_id.eq.${currentUserId},receiver_id.eq.${targetId}),and(sender_id.eq.${targetId},receiver_id.eq.${currentUserId})`)
-            .single();
+        // Check if there's already a pending/accepted request in either direction
+        // Use two separate queries to avoid complex OR/AND PostgREST syntax issues
+        const [{ data: sent }, { data: received }] = await Promise.all([
+            sb.from('friend_requests')
+                .select('id, status')
+                .eq('sender_id', currentUserId)
+                .eq('receiver_id', targetId)
+                .maybeSingle(),
+            sb.from('friend_requests')
+                .select('id, status')
+                .eq('sender_id', targetId)
+                .eq('receiver_id', currentUserId)
+                .maybeSingle()
+        ]);
 
+        const existing = sent || received;
         if (existing) {
-            Notifications.showToast({ type: 'info', title: 'Already connected', message: `Status: ${existing.status}` });
+            const msg = existing.status === 'pending'
+                ? 'Friend request already sent or pending.'
+                : `Already connected (${existing.status}).`;
+            Notifications.showToast({ type: 'info', title: 'Already Connected', message: msg });
             return;
         }
 
@@ -273,12 +299,13 @@ async function sendFriendRequest(targetId, targetName) {
         });
         if (error) throw error;
 
-        Notifications.showToast({ type: 'success', title: 'Request Sent!', message: `Friend request sent to ${targetName}` });
+        Notifications.showToast({ type: 'success', title: '✅ Request Sent!', message: `Friend request sent to ${targetName}` });
         document.getElementById('searchResults').style.display = 'none';
         document.getElementById('searchInput').value = '';
         await loadPendingSent();
     } catch (e) {
-        Notifications.showToast({ type: 'error', title: 'Error', message: e.message });
+        console.error('[sendFriendRequest]', e);
+        Notifications.showToast({ type: 'error', title: 'Error', message: e.message || 'Could not send friend request.' });
     }
 }
 
