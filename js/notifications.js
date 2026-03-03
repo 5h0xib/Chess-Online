@@ -166,7 +166,7 @@ function subscribeToFriendRequests(userId) {
                 title: 'Friend Request',
                 message: `${name} sent you a friend request`,
                 actionLabel: 'View',
-                onAction: () => { window.location.href = '/friends.html'; }
+                onAction: () => { window.location.href = 'friends.html'; }
             });
         })
         .subscribe();

@@ -122,7 +122,7 @@ function setupFilters() {
 function setupLogout() {
     document.getElementById('logoutBtn')?.addEventListener('click', async () => {
         await Auth.signOut();
-        window.location.href = '/index.html';
+        window.location.href = 'index.html';
     });
 }
 

@@ -9,7 +9,7 @@ async function signUp(email, password, username) {
         .from('users')
         .select('id')
         .eq('username', username)
-        .single();
+        .maybeSingle();
 
     if (existing) {
         throw new Error('Username is already taken. Please choose another.');
@@ -41,13 +41,11 @@ async function signIn(email, password) {
  * Sign out current user
  */
 async function signOut() {
-    // Mark offline before logging out
     const user = await getCurrentUser();
     if (user) {
         await sb.from('users').update({ online_status: false }).eq('id', user.id);
     }
-    const { error } = await sb.auth.signOut();
-    if (error) throw error;
+    await sb.auth.signOut();
 }
 
 /**
@@ -62,59 +60,97 @@ async function getCurrentUser() {
  * Get the user's profile row from our public.users table
  */
 async function getUserProfile(userId) {
-    const { data, error } = await sb
+    const { data } = await sb
         .from('users')
         .select('*')
         .eq('id', userId)
-        .single();
-    if (error) throw error;
+        .maybeSingle();
     return data;
+}
+
+/**
+ * Ensure a profile row exists for the given user. Creates one if missing.
+ */
+async function ensureProfile(user) {
+    // Try to fetch existing row
+    let { data: profile } = await sb
+        .from('users')
+        .select('*')
+        .eq('id', user.id)
+        .maybeSingle();
+
+    if (!profile) {
+        // Trigger didn't fire — create the row manually
+        const username = user.user_metadata?.username
+            || user.email.split('@')[0]
+            || 'player_' + user.id.slice(0, 6);
+
+        const { data: inserted } = await sb
+            .from('users')
+            .upsert({ id: user.id, email: user.email, username }, { onConflict: 'id' })
+            .select()
+            .maybeSingle();
+
+        profile = inserted;
+    }
+
+    // Last-resort fallback so the page always has something to work with
+    if (!profile) {
+        profile = {
+            id: user.id,
+            email: user.email,
+            username: user.user_metadata?.username || user.email.split('@')[0] || 'Player',
+            online_status: false
+        };
+    }
+
+    return profile;
 }
 
 /**
  * Route guard – call at top of every protected page.
  * Redirects to index.html if not authenticated.
- * Returns the { user, profile } if authenticated.
+ * Returns { user, profile } on success, null on redirect.
  */
 async function requireAuth() {
-    const user = await getCurrentUser();
-    if (!user) {
-        window.location.href = '/index.html';
+    try {
+        const user = await getCurrentUser();
+        if (!user) {
+            window.location.href = 'index.html';
+            return null;
+        }
+
+        const profile = await ensureProfile(user);
+
+        // Set online (best-effort, non-blocking)
+        sb.from('users').update({ online_status: true }).eq('id', user.id).then(() => { });
+
+        // Mark offline on tab close
+        window.addEventListener('beforeunload', () => {
+            sb.from('users').update({ online_status: false }).eq('id', user.id);
+        });
+
+        return { user, profile };
+    } catch (err) {
+        console.error('[requireAuth] Unexpected error:', err);
+        window.location.href = 'index.html';
         return null;
     }
-    const profile = await getUserProfile(user.id);
-
-    // Set online status
-    await sb.from('users').update({ online_status: true }).eq('id', user.id);
-
-    // Mark offline when tab closes / browser navigates away
-    window.addEventListener('beforeunload', () => {
-        // Use navigator.sendBeacon for reliability on unload
-        const payload = JSON.stringify({ online_status: false });
-        // We do a best-effort update; full reliability requires Supabase presence
-        sb.from('users').update({ online_status: false }).eq('id', user.id);
-    });
-
-    return { user, profile };
 }
 
 /**
  * Redirect to dashboard if already logged in (use on auth page)
  */
 async function redirectIfLoggedIn() {
-    const user = await getCurrentUser();
-    if (user) {
-        window.location.href = '/dashboard.html';
-    }
+    try {
+        const user = await getCurrentUser();
+        if (user) window.location.href = 'dashboard.html';
+    } catch (e) { /* ignore */ }
 }
 
 // Expose globally
 window.Auth = {
-    signUp,
-    signIn,
-    signOut,
-    getCurrentUser,
-    getUserProfile,
-    requireAuth,
-    redirectIfLoggedIn
+    signUp, signIn, signOut,
+    getCurrentUser, getUserProfile, ensureProfile,
+    requireAuth, redirectIfLoggedIn
 };
