@@ -69,8 +69,8 @@ function renderTable(games) {
 
     if (!games.length) {
         tbody.innerHTML = `<tr><td colspan="5">
-            <div class="empty-state" style="padding:40px">
-                <div class="icon">♟️</div>
+            <div class="empty-state">
+                <div class="empty-icon"><i class="bi bi-controller"></i></div>
                 <h3>No games found</h3>
                 <p>Play some games to see your history here!</p>
             </div>

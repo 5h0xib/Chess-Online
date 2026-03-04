@@ -1,4 +1,4 @@
-// ===== DASHBOARD MODULE =====
+﻿// ===== DASHBOARD MODULE =====
 
 let dashProfile = null;
 let dashUser = null;
@@ -30,7 +30,7 @@ async function initDashboard() {
 function renderUserInfo() {
     const el = (id) => document.getElementById(id);
     if (el('navUsername')) el('navUsername').textContent = dashProfile.username;
-    if (el('welcomeName')) el('welcomeName').textContent = `Hey, ${dashProfile.username}! 👋`;
+    if (el('welcomeName')) el('welcomeName').textContent = `Hey, ${dashProfile.username}!`;
     if (el('navAvatar')) el('navAvatar').textContent = dashProfile.username[0].toUpperCase();
 }
 
@@ -87,9 +87,10 @@ async function loadFriendsSidebar() {
             .limit(10);
 
         if (!data?.length) {
-            list.innerHTML = `<div class="empty-state" style="padding:20px">
-                <div class="icon">👥</div><h3>No friends yet</h3>
-                <p><a href="/Chess-Online/friends.html" style="color:var(--accent-purple-light)">Find friends →</a></p>
+            list.innerHTML = `<div class="empty-state">
+                <div class="empty-icon"><i class="bi bi-people"></i></div>
+                <h3>No friends yet</h3>
+                <p><a href="/Chess-Online/friends.html">Find friends &rarr;</a></p>
             </div>`;
             return;
         }
@@ -105,12 +106,14 @@ async function loadFriendsSidebar() {
                     <div class="friend-status">${f.online_status ? 'Online' : 'Offline'}</div>
                 </div>
                 <div class="friend-actions">
-                    <button class="btn btn-ghost btn-sm" onclick="dashChallenge('${f.id}','${escHtml(f.username)}')">⚔️</button>
+                    <button class="btn btn-ghost btn-sm btn-icon" onclick="dashChallenge('${f.id}','${escHtml(f.username)}')" title="Challenge">
+                        <i class="bi bi-sword"></i>
+                    </button>
                 </div>
             </div>`;
         }).join('');
     } catch (e) {
-        list.innerHTML = `<div class="empty-state" style="padding:20px"><div class="icon">⚠️</div><h3>Could not load friends</h3></div>`;
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="bi bi-exclamation-triangle"></i></div><h3>Could not load friends</h3></div>`;
     }
 }
 
@@ -130,8 +133,9 @@ async function loadRecentGames() {
             .limit(5);
 
         if (!data?.length) {
-            list.innerHTML = `<div class="empty-state" style="padding:20px">
-                <div class="icon">♟️</div><h3>No games yet</h3>
+            list.innerHTML = `<div class="empty-state">
+                <div class="empty-icon"><i class="bi bi-controller"></i></div>
+                <h3>No games yet</h3>
                 <p>Challenge a friend to get started!</p>
             </div>`;
             return;
@@ -148,16 +152,16 @@ async function loadRecentGames() {
             }
             const date = new Date(g.created_at).toLocaleDateString();
             return `<div class="game-row" onclick="window.location='/Chess-Online/game.html?view=${g.id}'">
-                <div class="game-icon">♟️</div>
+                <div class="game-icon"><i class="bi bi-controller"></i></div>
                 <div class="game-info">
                     <div class="game-opponent">vs ${escHtml(oppName || 'Unknown')}</div>
-                    <div class="game-meta">${isWhite ? 'White' : 'Black'} • ${date}</div>
+                    <div class="game-meta">${isWhite ? 'White' : 'Black'} &bull; ${date}</div>
                 </div>
                 <div class="game-result ${result}">${resultLabel}</div>
             </div>`;
         }).join('');
     } catch (e) {
-        list.innerHTML = `<div class="empty-state" style="padding:20px"><div class="icon">⚠️</div><h3>Could not load games</h3></div>`;
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="bi bi-exclamation-triangle"></i></div><h3>Could not load games</h3></div>`;
     }
 }
 

@@ -1,78 +1,80 @@
-/* ===== HISTORY PAGE CSS ===== */
+/* ── HISTORY PAGE ───────────────────────────────────────── */
 .history-page {
     min-height: 100vh;
+    background: var(--bg-default);
 }
 
 .history-main {
     max-width: 900px;
     margin: 0 auto;
-    padding: 32px 24px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
 }
 
-/* ===== FILTER BAR ===== */
+/* Filter bar */
 .filter-bar {
     display: flex;
-    gap: 10px;
+    gap: 8px;
     flex-wrap: wrap;
-    align-items: center;
 }
 
 .filter-btn {
-    padding: 8px 18px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    padding: 5px 14px;
     border-radius: 99px;
-    color: var(--text-secondary);
-    font-family: inherit;
-    font-size: 0.85rem;
-    font-weight: 500;
+    font-family: var(--font);
+    font-size: 0.8rem;
+    font-weight: 600;
+    border: 1px solid var(--border-default);
+    background: var(--bg-canvas);
+    color: var(--fg-muted);
     cursor: pointer;
-    transition: var(--transition);
+    transition: all var(--transition);
 }
 
-.filter-btn:hover,
+.filter-btn:hover {
+    background: var(--bg-subtle);
+    color: var(--fg-default);
+}
+
 .filter-btn.active {
-    background: var(--accent-purple);
-    border-color: var(--accent-purple);
+    background: var(--accent-emphasis);
+    border-color: var(--accent-emphasis);
     color: #fff;
 }
 
-/* ===== HISTORY TABLE ===== */
+/* Table */
 .history-table-wrap {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-    box-shadow: var(--shadow-md);
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    overflow: auto;
 }
 
 .history-table {
     width: 100%;
     border-collapse: collapse;
-}
-
-.history-table thead {
-    background: rgba(255, 255, 255, 0.04);
-    border-bottom: 1px solid var(--border);
+    font-size: 0.875rem;
 }
 
 .history-table th {
-    padding: 14px 18px;
-    text-align: left;
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--text-muted);
+    padding: 10px 16px;
+    background: var(--bg-subtle);
+    color: var(--fg-muted);
+    font-weight: 600;
+    font-size: 0.78rem;
     text-transform: uppercase;
-    letter-spacing: 1px;
+    letter-spacing: 0.04em;
+    text-align: left;
+    border-bottom: 1px solid var(--border-default);
+    white-space: nowrap;
 }
 
 .history-table td {
-    padding: 14px 18px;
-    font-size: 0.9rem;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.04);
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-muted);
+    color: var(--fg-default);
     vertical-align: middle;
 }
 
@@ -80,66 +82,53 @@
     border-bottom: none;
 }
 
-.history-table tbody tr {
-    transition: var(--transition);
+.history-table tbody tr:hover {
+    background: var(--bg-subtle);
     cursor: pointer;
 }
 
-.history-table tbody tr:hover {
-    background: var(--surface-hover);
-}
-
+/* Result badges */
 .result-win {
-    color: var(--accent-green);
+    color: var(--success-fg);
     font-weight: 700;
 }
 
 .result-loss {
-    color: var(--accent-red);
+    color: var(--danger-fg);
     font-weight: 700;
 }
 
 .result-draw {
-    color: var(--text-secondary);
+    color: var(--fg-muted);
     font-weight: 600;
 }
 
 .color-white {
-    color: #e2d9c5;
+    color: var(--fg-default);
     font-weight: 600;
 }
 
 .color-black {
-    color: var(--text-secondary);
+    color: var(--fg-muted);
     font-weight: 600;
 }
 
 .game-date {
-    color: var(--text-muted);
-    font-size: 0.82rem;
+    color: var(--fg-muted);
+    font-size: 0.8rem;
 }
 
 .moves-count {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    min-width: 28px;
-    padding: 2px 8px;
-    background: var(--surface-hover);
-    border-radius: 99px;
-    font-size: 0.8rem;
+    color: var(--fg-default);
     font-weight: 600;
-    color: var(--text-secondary);
+    font-variant-numeric: tabular-nums;
 }
 
-@media (max-width: 640px) {
+/* Responsive: collapse table on mobile */
+@media (max-width: 540px) {
 
     .history-table th:nth-child(4),
     .history-table td:nth-child(4) {
         display: none;
-    }
-
-    .history-main {
-        padding: 20px 16px;
     }
 }

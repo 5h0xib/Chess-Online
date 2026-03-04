@@ -31,7 +31,7 @@ async function loadAllTabs() {
 async function loadFriends() {
     const list = document.getElementById('friendsList');
     if (!list) return;
-    list.innerHTML = '<div class="empty-state"><div class="icon">⏳</div></div>';
+    list.innerHTML = '<div class="empty-state"><div class="empty-icon"><i class="bi bi-people"></i></div></div>';
 
     const { data, error } = await sb
         .from('friends')
@@ -40,7 +40,7 @@ async function loadFriends() {
 
     if (error || !data?.length) {
         list.innerHTML = `<div class="empty-state">
-            <div class="icon">👥</div>
+            <div class="empty-icon"><i class="bi bi-people"></i></div>
             <h3>No friends yet</h3>
             <p>Search for users and send requests!</p>
         </div>`;
@@ -67,7 +67,7 @@ async function loadPendingReceived() {
         .eq('status', 'pending');
 
     if (!data?.length) {
-        list.innerHTML = `<div class="empty-state"><div class="icon">📭</div><h3>No pending requests</h3></div>`;
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="bi bi-inbox"></i></div><h3>No pending requests</h3></div>`;
         return;
     }
 
@@ -79,8 +79,16 @@ async function loadPendingReceived() {
     });
 
     // Update tab badge
-    const badge = document.getElementById('pendingBadge');
-    if (badge) badge.textContent = data.length;
+    const badge = document.getElementById('receivedCount');
+    if (badge) {
+        badge.textContent = data.length;
+        badge.style.display = data.length ? 'inline' : 'none';
+    }
+    const pendingCount = document.getElementById('pendingCount');
+    if (pendingCount) {
+        pendingCount.textContent = `${data.length} pending`;
+        pendingCount.style.display = data.length ? 'inline-flex' : 'none';
+    }
 }
 
 // ===== LOAD PENDING SENT =====
@@ -95,7 +103,7 @@ async function loadPendingSent() {
         .eq('status', 'pending');
 
     if (!data?.length) {
-        list.innerHTML = `<div class="empty-state"><div class="icon">📤</div><h3>No sent requests</h3></div>`;
+        list.innerHTML = `<div class="empty-state"><div class="empty-icon"><i class="bi bi-send"></i></div><h3>No sent requests</h3></div>`;
         return;
     }
 
@@ -118,29 +126,40 @@ function createFriendCard(user, type, requestId = null) {
     let actionsHtml = '';
     if (type === 'friend') {
         actionsHtml = `
-            <button class="btn btn-primary btn-sm" onclick="challengeFriend('${user.id}', '${user.username}')">⚔️ Challenge</button>
-            <button class="btn btn-danger btn-sm" onclick="removeFriend('${user.id}')">Remove</button>
+            <button class="btn btn-primary btn-sm" onclick="challengeFriend('${user.id}', '${user.username}')">
+                <i class="bi bi-sword"></i> Challenge
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="removeFriend('${user.id}')">
+                <i class="bi bi-person-x"></i> Remove
+            </button>
         `;
     } else if (type === 'pending-received') {
         actionsHtml = `
-            <button class="btn btn-success btn-sm" onclick="acceptRequest('${requestId}')">✓ Accept</button>
-            <button class="btn btn-danger btn-sm" onclick="rejectRequest('${requestId}')">✕ Decline</button>
+            <button class="btn btn-success btn-sm" onclick="acceptRequest('${requestId}')">
+                <i class="bi bi-check-lg"></i> Accept
+            </button>
+            <button class="btn btn-danger btn-sm" onclick="rejectRequest('${requestId}')">
+                <i class="bi bi-x-lg"></i> Decline
+            </button>
         `;
     } else if (type === 'pending-sent') {
         actionsHtml = `
-            <span class="pending-label">⏳ Pending</span>
-            <button class="btn btn-ghost btn-sm" onclick="cancelRequest('${requestId}')">Cancel</button>
+            <span class="pending-label"><i class="bi bi-clock"></i> Pending</span>
+            <button class="btn btn-ghost btn-sm" onclick="cancelRequest('${requestId}')">
+                <i class="bi bi-x"></i> Cancel
+            </button>
         `;
     }
 
     card.innerHTML = `
         <div class="avatar">${initial}</div>
-        <div style="display:flex;align-items:center;gap:6px;">
-            <div class="online-dot ${isOnline ? 'online' : ''}"></div>
-        </div>
+        <div class="online-dot ${isOnline ? 'online' : ''}"></div>
         <div class="fc-info">
             <div class="fc-name">${escapeHtml(user.username)}</div>
-            <div class="fc-meta">${isOnline ? '🟢 Online' : '⚫ Offline'}</div>
+            <div class="fc-meta">${isOnline
+            ? '<i class="bi bi-circle-fill" style="color:var(--success-emphasis);font-size:0.55rem;"></i> Online'
+            : '<i class="bi bi-circle" style="color:var(--fg-subtle);font-size:0.55rem;"></i> Offline'}
+            </div>
         </div>
         <div class="fc-actions">${actionsHtml}</div>
     `;
@@ -218,7 +237,7 @@ function setupSearchBar() {
             return;
         }
         // Show loading state immediately
-        results.innerHTML = `<div class="search-result-item"><span style="color:var(--text-muted)">🔍 Searching...</span></div>`;
+        results.innerHTML = `<div class="search-result-item"><span style="color:var(--fg-muted)"><i class="bi bi-search" style="margin-right:6px;"></i>Searching...</span></div>`;
         results.style.display = 'block';
         debounceTimer = setTimeout(() => searchUsers(q), 350);
     });
@@ -247,7 +266,7 @@ async function searchUsers(query) {
         .limit(8);
 
     if (!data?.length) {
-        results.innerHTML = `<div class="search-result-item"><span style="color:var(--text-muted)">No users found</span></div>`;
+        results.innerHTML = `<div class="search-result-item"><span style="color:var(--fg-muted)">No users found</span></div>`;
         results.style.display = 'block';
         return;
     }
@@ -255,12 +274,15 @@ async function searchUsers(query) {
     results.innerHTML = data.map(u => `
         <div class="search-result-item" data-uid="${u.id}">
             <div class="avatar avatar-sm">${u.username[0].toUpperCase()}</div>
-            <div>
-                <div class="sname">${escapeHtml(u.username)}</div>
-                <div class="semail">${u.online_status ? '🟢 Online' : '⚫ Offline'}</div>
+            <div class="sr-info">
+                <div class="sr-name">${escapeHtml(u.username)}</div>
+                <div class="sr-status">${u.online_status
+            ? '<i class="bi bi-circle-fill" style="color:var(--success-emphasis);font-size:0.5rem;"></i> Online'
+            : '<i class="bi bi-circle" style="color:var(--fg-subtle);font-size:0.5rem;"></i> Offline'}
+                </div>
             </div>
             <button class="btn btn-primary btn-sm" onclick="sendFriendRequest('${u.id}', '${escapeHtml(u.username)}')">
-                + Add
+                <i class="bi bi-person-plus"></i> Add
             </button>
         </div>
     `).join('');
@@ -299,7 +321,7 @@ async function sendFriendRequest(targetId, targetName) {
         });
         if (error) throw error;
 
-        Notifications.showToast({ type: 'success', title: '✅ Request Sent!', message: `Friend request sent to ${targetName}` });
+        Notifications.showToast({ type: 'success', title: 'Request Sent!', message: `Friend request sent to ${targetName}` });
         document.getElementById('searchResults').style.display = 'none';
         document.getElementById('searchInput').value = '';
         await loadPendingSent();

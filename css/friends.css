@@ -1,139 +1,126 @@
-/* ===== FRIENDS PAGE CSS ===== */
+/* ── FRIENDS PAGE ───────────────────────────────────────── */
 .friends-page {
     min-height: 100vh;
+    background: var(--bg-default);
 }
 
 .friends-main {
     max-width: 860px;
     margin: 0 auto;
-    padding: 32px 24px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: 24px;
+    gap: 20px;
 }
 
 .page-heading {
     display: flex;
     align-items: center;
-    justify-content: space-between;
-    flex-wrap: wrap;
     gap: 12px;
+    flex-wrap: wrap;
 }
 
 .page-heading h1 {
-    font-size: 1.7rem;
-    font-weight: 800;
+    font-size: 1.25rem;
 }
 
-/* ===== SEARCH BAR ===== */
+/* Search */
 .search-section {
-    display: flex;
-    gap: 10px;
-    align-items: center;
+    position: relative;
 }
 
 .search-wrap {
     position: relative;
-    flex: 1;
+    display: flex;
+    align-items: center;
 }
 
-.search-wrap input {
-    width: 100%;
-    padding: 12px 16px 12px 44px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    color: var(--text-primary);
-    font-family: inherit;
-    font-size: 0.95rem;
-    outline: none;
-    transition: var(--transition);
-}
-
-.search-wrap input:focus {
-    border-color: var(--border-focus);
-    background: var(--surface-hover);
-    box-shadow: 0 0 0 3px rgba(139, 92, 246, 0.12);
-}
-
-.search-wrap input::placeholder {
-    color: var(--text-muted);
-}
-
-.search-icon {
+.search-wrap i.search-icon {
     position: absolute;
-    left: 14px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--text-muted);
-    font-size: 1.1rem;
+    left: 12px;
+    color: var(--fg-subtle);
+    font-size: 1rem;
     pointer-events: none;
+    z-index: 1;
 }
 
-/* ===== SEARCH RESULTS DROPDOWN ===== */
+.search-wrap .input {
+    padding-left: 36px;
+    background: var(--bg-canvas);
+    border-color: var(--border-default);
+    height: 40px;
+}
+
+.search-wrap .input:focus {
+    box-shadow: 0 0 0 3px rgba(9, 105, 218, 0.2);
+}
+
 .search-results {
+    display: none;
     position: absolute;
-    top: calc(100% + 6px);
+    top: calc(100% + 4px);
     left: 0;
     right: 0;
-    background: #1a1730;
-    border: 1px solid var(--border);
+    z-index: 200;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-default);
     border-radius: var(--radius-md);
     box-shadow: var(--shadow-lg);
-    z-index: 200;
-    max-height: 260px;
+    max-height: 320px;
     overflow-y: auto;
 }
 
 .search-result-item {
     display: flex;
     align-items: center;
-    gap: 12px;
-    padding: 12px 16px;
-    cursor: default;
-    transition: var(--transition);
+    gap: 10px;
+    padding: 10px 14px;
+    border-bottom: 1px solid var(--border-muted);
+    transition: background var(--transition);
+}
+
+.search-result-item:last-child {
+    border-bottom: none;
 }
 
 .search-result-item:hover {
-    background: var(--surface-hover);
+    background: var(--bg-subtle);
 }
 
-.search-result-item .sname {
+.sr-name {
+    font-size: 0.875rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    color: var(--fg-default);
 }
 
-.search-result-item .semail {
-    font-size: 0.78rem;
-    color: var(--text-muted);
+.sr-status {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
 }
 
-/* ===== TABS ===== */
-.friends-tabs-wrap {
-    margin-bottom: 4px;
+.sr-info {
+    flex: 1;
+    min-width: 0;
 }
 
-/* ===== FRIEND CARD ===== */
+/* Friend cards */
 .friends-list {
     display: flex;
     flex-direction: column;
-    gap: 10px;
+    gap: 2px;
 }
 
 .friend-card {
     display: flex;
     align-items: center;
-    gap: 14px;
-    padding: 16px;
-    background: var(--surface);
-    border: 1px solid var(--border);
+    gap: 12px;
+    padding: 10px 12px;
     border-radius: var(--radius-md);
-    transition: var(--transition);
+    transition: background var(--transition);
 }
 
 .friend-card:hover {
-    background: var(--surface-hover);
-    border-color: rgba(255, 255, 255, 0.15);
+    background: var(--bg-subtle);
 }
 
 .fc-info {
@@ -142,47 +129,53 @@
 }
 
 .fc-name {
-    font-weight: 700;
-    font-size: 0.95rem;
-    display: flex;
-    align-items: center;
-    gap: 8px;
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--fg-default);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .fc-meta {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 3px;
+    font-size: 0.775rem;
+    color: var(--fg-muted);
 }
 
 .fc-actions {
     display: flex;
-    gap: 8px;
-    align-items: center;
+    gap: 6px;
     flex-shrink: 0;
-    flex-wrap: wrap;
 }
 
-/* ===== PENDING BADGE ===== */
 .pending-label {
-    font-size: 0.75rem;
-    font-weight: 600;
-    padding: 3px 10px;
-    background: rgba(245, 158, 11, 0.15);
-    color: var(--accent-gold-light);
-    border-radius: 99px;
+    font-size: 0.775rem;
+    color: var(--fg-muted);
+    font-style: italic;
+    align-self: center;
 }
 
-@media (max-width: 600px) {
-    .friends-main {
-        padding: 20px 16px;
-    }
+/* Table card wrapper */
+.friends-card {
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-default);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+}
 
-    .friend-card {
-        flex-wrap: wrap;
-    }
+.friends-card-header {
+    padding: 10px 16px;
+    border-bottom: 1px solid var(--border-default);
+    background: var(--bg-subtle);
+}
 
+.friends-card-body {
+    padding: 4px 0;
+}
+
+@media (max-width: 480px) {
     .fc-actions {
-        width: 100%;
+        flex-direction: column;
+        gap: 4px;
     }
 }

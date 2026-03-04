@@ -1,184 +1,164 @@
-/* ===== DASHBOARD CSS ===== */
+/* ── DASHBOARD PAGE ─────────────────────────────────────── */
 .dashboard-page {
     min-height: 100vh;
+    background: var(--bg-default);
 }
 
 .dashboard-main {
     max-width: 1100px;
     margin: 0 auto;
-    padding: 32px 24px;
+    padding: 24px 20px;
     display: flex;
     flex-direction: column;
-    gap: 28px;
+    gap: 20px;
 }
 
-/* ===== HERO WELCOME ===== */
+/* Welcome banner */
 .welcome-banner {
-    background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(99, 102, 241, 0.10));
-    border: 1px solid rgba(139, 92, 246, 0.25);
-    border-radius: var(--radius-xl);
-    padding: 28px 32px;
+    padding: 24px;
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 20px;
+    gap: 16px;
     flex-wrap: wrap;
 }
 
 .welcome-text h2 {
-    font-size: 1.8rem;
-    font-weight: 800;
-    background: linear-gradient(135deg, #fff 0%, #a78bfa 100%);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
+    color: var(--fg-default);
+    margin-bottom: 4px;
 }
 
 .welcome-text p {
-    color: var(--text-secondary);
-    margin-top: 6px;
+    font-size: 0.875rem;
+    color: var(--fg-muted);
 }
 
 .welcome-actions {
     display: flex;
-    gap: 12px;
+    gap: 8px;
     flex-wrap: wrap;
 }
 
-/* ===== STATS ROW ===== */
+/* Stats row */
 .stats-row {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-    gap: 16px;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
 }
 
-.stat-card {
-    padding: 20px;
-    text-align: center;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: var(--radius-lg);
-    transition: var(--transition);
+@media (max-width: 600px) {
+    .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+    }
 }
 
-.stat-card:hover {
-    background: var(--surface-hover);
-    transform: translateY(-3px);
-    border-color: var(--border-focus);
-}
-
-.stat-value {
-    font-size: 2rem;
-    font-weight: 800;
-    line-height: 1.1;
-    background: linear-gradient(135deg, var(--accent-gold-light), var(--accent-gold));
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-}
-
-.stat-label {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 4px;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-    font-weight: 600;
-}
-
-/* ===== CONTENT GRID ===== */
+/* Content grid */
 .content-grid {
     display: grid;
     grid-template-columns: 1fr 340px;
-    gap: 24px;
+    gap: 20px;
     align-items: start;
 }
 
-@media (max-width: 900px) {
+@media (max-width: 860px) {
     .content-grid {
         grid-template-columns: 1fr;
     }
 }
 
-/* ===== SECTION CARDS ===== */
+/* Section card */
 .section-card {
-    padding: 24px;
+    padding: 16px;
 }
 
-.section-header {
+/* Quick play options */
+.play-options {
     display: flex;
-    align-items: center;
-    justify-content: space-between;
-    margin-bottom: 20px;
+    flex-direction: column;
+    gap: 2px;
 }
 
-.section-title {
-    font-size: 1.05rem;
-    font-weight: 700;
-    display: flex;
-    align-items: center;
-    gap: 8px;
-}
-
-.section-title .icon {
-    font-size: 1.2rem;
-}
-
-/* ===== FRIEND LIST (dashboard sidebar) ===== */
-.friend-item {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    padding: 12px;
-    border-radius: var(--radius-md);
-    transition: var(--transition);
-    cursor: default;
-}
-
-.friend-item:hover {
-    background: var(--surface-hover);
-}
-
-.friend-info {
-    flex: 1;
-    min-width: 0;
-}
-
-.friend-name {
-    font-weight: 600;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
-
-.friend-status {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-}
-
-.friend-actions {
-    display: flex;
-    gap: 6px;
-}
-
-/* ===== RECENT GAMES LIST ===== */
-.game-row {
+.play-option {
     display: flex;
     align-items: center;
     gap: 14px;
     padding: 12px;
     border-radius: var(--radius-md);
-    transition: var(--transition);
+    background: none;
+    border: none;
     cursor: pointer;
+    color: var(--fg-default);
+    font-family: var(--font);
+    text-align: left;
+    width: 100%;
+    transition: background var(--transition);
+}
+
+.play-option:hover {
+    background: var(--bg-subtle);
+}
+
+.play-option .po-icon {
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--accent-bg);
+    color: var(--accent-fg);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.1rem;
+    flex-shrink: 0;
+}
+
+.play-option:nth-child(2) .po-icon {
+    background: var(--warn-bg);
+    color: var(--warn-fg);
+}
+
+.play-option:nth-child(3) .po-icon {
+    background: var(--bg-muted);
+    color: var(--fg-muted);
+}
+
+.play-option .po-text h4 {
+    font-size: 0.875rem;
+    font-weight: 600;
+    color: var(--fg-default);
+    margin-bottom: 1px;
+}
+
+.play-option .po-text p {
+    font-size: 0.775rem;
+    color: var(--fg-muted);
+}
+
+/* Game row */
+.game-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 12px;
+    border-radius: var(--radius-md);
+    cursor: pointer;
+    transition: background var(--transition);
 }
 
 .game-row:hover {
-    background: var(--surface-hover);
+    background: var(--bg-subtle);
 }
 
 .game-icon {
-    font-size: 1.6rem;
+    width: 36px;
+    height: 36px;
+    border-radius: var(--radius-md);
+    background: var(--bg-muted);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1rem;
+    color: var(--fg-muted);
+    flex-shrink: 0;
 }
 
 .game-info {
@@ -187,101 +167,68 @@
 }
 
 .game-opponent {
+    font-size: 0.875rem;
     font-weight: 600;
-    font-size: 0.9rem;
+    color: var(--fg-default);
 }
 
 .game-meta {
-    font-size: 0.78rem;
-    color: var(--text-muted);
-    margin-top: 2px;
+    font-size: 0.775rem;
+    color: var(--fg-muted);
 }
 
 .game-result {
+    font-size: 0.78rem;
     font-weight: 700;
-    font-size: 0.85rem;
-}
-
-.game-result.win {
-    color: var(--accent-green);
-}
-
-.game-result.loss {
-    color: var(--accent-red);
-}
-
-.game-result.draw {
-    color: var(--text-secondary);
-}
-
-/* ===== QUICK PLAY CARD ===== */
-.play-options {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
-}
-
-.play-option {
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    padding: 16px;
-    border: 1px solid var(--border);
-    border-radius: var(--radius-md);
-    cursor: pointer;
-    background: var(--surface);
-    transition: var(--transition);
-    text-align: left;
-    width: 100%;
-}
-
-.play-option:hover {
-    background: var(--surface-hover);
-    border-color: var(--border-focus);
-    transform: translateX(4px);
-}
-
-.play-option .po-icon {
-    font-size: 2rem;
+    padding: 2px 8px;
+    border-radius: 99px;
     flex-shrink: 0;
 }
 
-.play-option .po-text h4 {
-    font-weight: 700;
-    font-size: 0.95rem;
+.game-result.win {
+    background: var(--success-bg);
+    color: var(--success-fg);
 }
 
-.play-option .po-text p {
-    font-size: 0.8rem;
-    color: var(--text-muted);
-    margin-top: 2px;
+.game-result.loss {
+    background: var(--danger-bg);
+    color: var(--danger-fg);
 }
 
-/* ===== NOTIFICATION BADGE ===== */
-.notif-badge {
-    display: inline-flex;
+.game-result.draw {
+    background: var(--bg-muted);
+    color: var(--fg-muted);
+}
+
+/* Friends sidebar */
+.friend-item {
+    display: flex;
     align-items: center;
-    justify-content: center;
-    width: 20px;
-    height: 20px;
-    background: var(--accent-red);
-    border-radius: 50%;
-    font-size: 0.72rem;
-    font-weight: 700;
-    color: #fff;
-    line-height: 1;
+    gap: 10px;
+    padding: 8px 10px;
+    border-radius: var(--radius-md);
+    transition: background var(--transition);
 }
 
-@media (max-width: 600px) {
-    .dashboard-main {
-        padding: 20px 16px;
-    }
+.friend-item:hover {
+    background: var(--bg-subtle);
+}
 
-    .welcome-banner {
-        padding: 20px;
-    }
+.friend-info {
+    flex: 1;
+    min-width: 0;
+}
 
-    .welcome-text h2 {
-        font-size: 1.4rem;
-    }
+.friend-name {
+    font-size: 0.85rem;
+    font-weight: 600;
+    color: var(--fg-default);
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.friend-status {
+    font-size: 0.75rem;
+    color: var(--fg-muted);
 }

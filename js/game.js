@@ -342,10 +342,10 @@ function handleGameOver(game) {
     const winner = game.winner;
     let msg, type;
     if (!winner || winner === 'draw') {
-        msg = "It's a Draw! 🤝"; type = 'info';
+        msg = "It's a Draw!"; type = 'info';
     } else {
         const iWon = (winner === gameState.myColor);
-        msg = iWon ? '🏆 You Win!' : '💀 You Lost!';
+        msg = iWon ? 'You Win!' : 'You Lost!';
         type = iWon ? 'success' : 'error';
     }
     Notifications.showToast({ type, title: msg, message: 'Game Over!', duration: 0 });

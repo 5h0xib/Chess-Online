@@ -1,13 +1,18 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description"
-        content="Chess Online – Play chess with friends in realtime. Sign up or log in to start playing.">
-    <title>Chess Online – Login / Sign Up</title>
+    <meta name="description" content="Chess Online – Play chess with friends in realtime. Sign up or log in to start.">
+    <title>Chess Online – Sign In</title>
+    <!-- Theme (apply before render to prevent flash) -->
+    <script>
+        try { document.documentElement.setAttribute('data-theme', localStorage.getItem('chess-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); } catch (e) { }
+    </script>
+    <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     <link rel="stylesheet" href="css/base.css">
     <link rel="stylesheet" href="css/auth.css">
 </head>
@@ -15,169 +20,170 @@
 <body class="auth-page">
 
     <main class="auth-wrapper">
-        <div class="auth-logo">
-            <span class="chess-icon">♚</span>
-            <h1>CHESS ONLINE</h1>
-            <p>Play · Challenge · Conquer</p>
+
+        <!-- Theme toggle (top right) -->
+        <div style="position:fixed;top:16px;right:16px;">
+            <button class="theme-toggle" aria-label="Toggle theme">
+                <i class="bi bi-moon-fill icon-moon"></i>
+                <i class="bi bi-sun-fill icon-sun"></i>
+            </button>
         </div>
 
+        <!-- Branding -->
+        <div class="auth-brand">
+            <img src="assets/logo.png" alt="Chess Online logo">
+            <h1>Chess Online</h1>
+            <p>Play, challenge, and conquer</p>
+        </div>
+
+        <!-- Auth Card -->
         <div class="auth-card">
             <div class="auth-tabs">
                 <button class="auth-tab active" id="loginTabBtn" onclick="switchTab('login')">Sign In</button>
-                <button class="auth-tab" id="signupTabBtn" onclick="switchTab('signup')">Sign Up</button>
+                <button class="auth-tab" id="signupTabBtn" onclick="switchTab('signup')">Create Account</button>
             </div>
 
-            <div class="auth-form-wrap">
+            <div class="auth-body">
 
-                <!-- ===== LOGIN PANEL ===== -->
-                <div class="auth-form-panel active" id="loginPanel">
+                <!-- LOGIN -->
+                <div class="auth-panel active" id="loginPanel">
                     <div id="loginError"></div>
                     <div class="input-group">
-                        <label for="loginEmail">Email</label>
-                        <div class="input-icon-wrap">
-                            <span class="icon">✉️</span>
-                            <input class="input" type="email" id="loginEmail" placeholder="your@email.com"
+                        <label for="loginEmail">Email address</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-envelope"></i>
+                            <input class="input" type="email" id="loginEmail" placeholder="you@example.com"
                                 autocomplete="email" required>
                         </div>
                     </div>
                     <div class="input-group">
                         <label for="loginPassword">Password</label>
-                        <div class="input-icon-wrap">
-                            <span class="icon">🔒</span>
+                        <div class="input-wrap">
+                            <i class="bi bi-lock"></i>
                             <input class="input" type="password" id="loginPassword" placeholder="••••••••"
                                 autocomplete="current-password" required>
                         </div>
                     </div>
                     <button class="btn btn-primary btn-full btn-lg" id="loginBtn" onclick="handleLogin()">
+                        <i class="bi bi-box-arrow-in-right"></i>
                         Sign In
                     </button>
-                    <p class="auth-footer">Don't have an account? <a onclick="switchTab('signup')"
-                            style="cursor:pointer">Sign Up</a></p>
+                    <p class="auth-footer-text">Don't have an account? <a onclick="switchTab('signup')">Sign up</a></p>
                 </div>
 
-                <!-- ===== SIGNUP PANEL ===== -->
-                <div class="auth-form-panel" id="signupPanel">
+                <!-- SIGNUP -->
+                <div class="auth-panel" id="signupPanel">
                     <div id="signupError"></div>
                     <div id="signupSuccess"></div>
                     <div class="input-group">
                         <label for="signupUsername">Username</label>
-                        <div class="input-icon-wrap">
-                            <span class="icon">♟️</span>
-                            <input class="input" type="text" id="signupUsername" placeholder="coolchessplayer42"
+                        <div class="input-wrap">
+                            <i class="bi bi-person"></i>
+                            <input class="input" type="text" id="signupUsername" placeholder="coolplayer42"
                                 maxlength="20" autocomplete="username" required>
                         </div>
                     </div>
                     <div class="input-group">
-                        <label for="signupEmail">Email</label>
-                        <div class="input-icon-wrap">
-                            <span class="icon">✉️</span>
-                            <input class="input" type="email" id="signupEmail" placeholder="your@email.com"
+                        <label for="signupEmail">Email address</label>
+                        <div class="input-wrap">
+                            <i class="bi bi-envelope"></i>
+                            <input class="input" type="email" id="signupEmail" placeholder="you@example.com"
                                 autocomplete="email" required>
                         </div>
                     </div>
                     <div class="input-group">
                         <label for="signupPassword">Password</label>
-                        <div class="input-icon-wrap">
-                            <span class="icon">🔒</span>
-                            <input class="input" type="password" id="signupPassword" placeholder="min 6 characters"
+                        <div class="input-wrap">
+                            <i class="bi bi-lock"></i>
+                            <input class="input" type="password" id="signupPassword" placeholder="Minimum 6 characters"
                                 autocomplete="new-password" required>
                         </div>
                     </div>
-                    <button class="btn btn-gold btn-full btn-lg" id="signupBtn" onclick="handleSignup()">
+                    <button class="btn btn-primary btn-full btn-lg" id="signupBtn" onclick="handleSignup()">
+                        <i class="bi bi-person-plus"></i>
                         Create Account
                     </button>
-                    <p class="auth-footer">Already have an account? <a onclick="switchTab('login')"
-                            style="cursor:pointer">Sign In</a></p>
+                    <p class="auth-footer-text">Already have an account? <a onclick="switchTab('login')">Sign in</a></p>
                 </div>
 
-            </div><!-- /auth-form-wrap -->
-        </div><!-- /auth-card -->
+            </div>
+        </div>
+
     </main>
 
     <div id="toast-container"></div>
 
-    <!-- Supabase SDK -->
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="js/supabase-client.js"></script>
-    <script src="js/auth.js"></script>
     <script>
-        // Redirect if already logged in
-        Auth.redirectIfLoggedIn();
-
-        function switchTab(tab) {
-            const panels = { login: 'loginPanel', signup: 'signupPanel' };
-            const tabBtns = { login: 'loginTabBtn', signup: 'signupTabBtn' };
-            Object.keys(panels).forEach(k => {
-                document.getElementById(panels[k]).classList.toggle('active', k === tab);
-                document.getElementById(tabBtns[k]).classList.toggle('active', k === tab);
-            });
-            clearMessages();
+        // Inline theme apply (already set via blocking script above)
+        function showMsg(id, type, msg) {
+            const el = document.getElementById(id);
+            if (!el) return;
+            el.innerHTML = `<div class="alert alert-${type}">
+            <i class="bi bi-${type === 'error' ? 'exclamation-triangle' : 'check-circle'}"></i>
+            ${msg}
+        </div>`;
         }
-
-        function clearMessages() {
+        function clearMsgs() {
             ['loginError', 'signupError', 'signupSuccess'].forEach(id => {
                 const el = document.getElementById(id);
                 if (el) el.innerHTML = '';
             });
         }
-
-        function showError(id, msg) {
-            const el = document.getElementById(id);
-            if (el) el.innerHTML = `<div class="error-msg">⚠️ ${msg}</div>`;
+        function switchTab(tab) {
+            const panels = { login: 'loginPanel', signup: 'signupPanel' };
+            const tabs = { login: 'loginTabBtn', signup: 'signupTabBtn' };
+            Object.keys(panels).forEach(k => {
+                document.getElementById(panels[k]).classList.toggle('active', k === tab);
+                document.getElementById(tabs[k]).classList.toggle('active', k === tab);
+            });
+            clearMsgs();
         }
-        function showSuccess(id, msg) {
-            const el = document.getElementById(id);
-            if (el) el.innerHTML = `<div class="success-msg">✅ ${msg}</div>`;
-        }
-
         async function handleLogin() {
             const btn = document.getElementById('loginBtn');
             const email = document.getElementById('loginEmail').value.trim();
-            const password = document.getElementById('loginPassword').value;
-            clearMessages();
-            if (!email || !password) { showError('loginError', 'Please fill in all fields.'); return; }
+            const pass = document.getElementById('loginPassword').value;
+            clearMsgs();
+            if (!email || !pass) { showMsg('loginError', 'error', 'Please fill in all fields.'); return; }
             btn.classList.add('btn-loading');
             try {
-                await Auth.signIn(email, password);
+                await Auth.signIn(email, pass);
                 window.location.href = '/Chess-Online/dashboard.html';
             } catch (e) {
-                showError('loginError', e.message || 'Login failed. Check your credentials.');
-            } finally {
-                btn.classList.remove('btn-loading');
-            }
+                showMsg('loginError', 'error', e.message || 'Login failed. Check your credentials.');
+            } finally { btn.classList.remove('btn-loading'); }
         }
-
         async function handleSignup() {
             const btn = document.getElementById('signupBtn');
             const username = document.getElementById('signupUsername').value.trim();
             const email = document.getElementById('signupEmail').value.trim();
-            const password = document.getElementById('signupPassword').value;
-            clearMessages();
-            if (!username || !email || !password) { showError('signupError', 'Please fill in all fields.'); return; }
-            if (username.length < 3) { showError('signupError', 'Username must be at least 3 characters.'); return; }
-            if (password.length < 6) { showError('signupError', 'Password must be at least 6 characters.'); return; }
+            const pass = document.getElementById('signupPassword').value;
+            clearMsgs();
+            if (!username || !email || !pass) { showMsg('signupError', 'error', 'Please fill in all fields.'); return; }
+            if (username.length < 3) { showMsg('signupError', 'error', 'Username must be at least 3 characters.'); return; }
+            if (pass.length < 6) { showMsg('signupError', 'error', 'Password must be at least 6 characters.'); return; }
             btn.classList.add('btn-loading');
             try {
-                await Auth.signUp(email, password, username);
-                showSuccess('signupSuccess', 'Account created! Check your email to confirm, then sign in.');
+                await Auth.signUp(email, pass, username);
+                showMsg('signupSuccess', 'success', 'Account created! Check your email to confirm, then sign in.');
                 document.getElementById('signupUsername').value = '';
                 document.getElementById('signupEmail').value = '';
                 document.getElementById('signupPassword').value = '';
             } catch (e) {
-                showError('signupError', e.message || 'Sign up failed. Please try again.');
-            } finally {
-                btn.classList.remove('btn-loading');
-            }
+                showMsg('signupError', 'error', e.message || 'Sign up failed.');
+            } finally { btn.classList.remove('btn-loading'); }
         }
-
-        // Allow Enter key to submit
         document.addEventListener('keydown', (e) => {
             if (e.key !== 'Enter') return;
-            const loginPanel = document.getElementById('loginPanel');
-            if (loginPanel.classList.contains('active')) handleLogin();
+            if (document.getElementById('loginPanel').classList.contains('active')) handleLogin();
             else handleSignup();
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/supabase-client.js"></script>
+    <script src="js/auth.js"></script>
+    <script src="js/theme.js"></script>
+    <script>Auth.redirectIfLoggedIn();</script>
 </body>
 
 </html>

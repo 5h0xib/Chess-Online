@@ -15,15 +15,20 @@ function showToast({ type = 'info', title, message, actionLabel, onAction, durat
     const toast = document.createElement('div');
     toast.className = `toast toast-${type}`;
 
-    const icons = { info: 'ℹ️', success: '✅', error: '❌', challenge: '♟️' };
+    const icons = {
+        info: '<i class="bi bi-info-circle-fill"></i>',
+        success: '<i class="bi bi-check-circle-fill"></i>',
+        error: '<i class="bi bi-x-circle-fill"></i>',
+        challenge: '<i class="bi bi-trophy-fill"></i>'
+    };
     toast.innerHTML = `
-        <span class="toast-icon">${icons[type] || '🔔'}</span>
+        <span class="toast-icon ${type}">${icons[type] || '<i class="bi bi-bell-fill"></i>'}</span>
         <div class="toast-body">
             <div class="toast-title">${title || ''}</div>
             ${message ? `<div class="toast-msg">${message}</div>` : ''}
         </div>
         ${actionLabel ? `<button class="toast-action" id="ta-${Date.now()}">${actionLabel}</button>` : ''}
-        <button class="toast-close">✕</button>
+        <button class="toast-close"><i class="bi bi-x"></i></button>
     `;
 
     container.appendChild(toast);
@@ -83,7 +88,7 @@ function subscribeToGameChallenges(userId, myProfile) {
 
             showToast({
                 type: 'challenge',
-                title: `♟️ Game Challenge!`,
+                title: 'Game Challenge!',
                 message: `${name} wants to play chess with you`,
                 actionLabel: 'Accept',
                 duration: 20000,
