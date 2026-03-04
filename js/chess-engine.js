@@ -571,30 +571,46 @@ function clearGameAlerts() {
 }
 function isValidSquare(row, col) { return row >= 0 && row < 8 && col >= 0 && col < 8; }
 
-// ===== MOVE HISTORY DISPLAY =====
+// ===== MOVE HISTORY DISPLAY (TABLE FORMAT) =====
 function updateMoveHistory() {
-    const list = document.getElementById('moveHistoryList');
-    if (!list) return;
-    list.innerHTML = '';
+    const container = document.getElementById('moveHistoryList');
+    if (!container) return;
+
     const history = gameState.moveHistory;
-    for (let i = 0; i < history.length; i += 2) {
-        const div = document.createElement('div');
-        div.className = 'move-pair';
-        const num = document.createElement('span');
-        num.className = 'move-num'; num.textContent = (i / 2 + 1) + '.';
-        const wMove = document.createElement('span');
-        wMove.className = 'move-cell white-move';
-        wMove.textContent = formatMove(history[i]);
-        div.appendChild(num); div.appendChild(wMove);
-        if (history[i + 1]) {
-            const bMove = document.createElement('span');
-            bMove.className = 'move-cell black-move';
-            bMove.textContent = formatMove(history[i + 1]);
-            div.appendChild(bMove);
-        }
-        list.appendChild(div);
+    if (!history.length) {
+        container.innerHTML = '<p style="color:var(--fg-subtle);font-size:0.8rem;text-align:center;padding:12px 0;">No moves yet</p>';
+        return;
     }
-    list.scrollTop = list.scrollHeight;
+
+    let rows = '';
+    for (let i = 0; i < history.length; i += 2) {
+        const num = i / 2 + 1;
+        const wTxt = formatMove(history[i]);
+        const bTxt = history[i + 1] ? formatMove(history[i + 1]) : '';
+        rows += `<tr>
+            <td>${num}.</td>
+            <td class="white-move">${wTxt}</td>
+            <td class="black-move">${bTxt}</td>
+        </tr>`;
+    }
+
+    container.innerHTML = `
+        <div class="move-history-wrap">
+            <table class="move-history-table">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>White</th>
+                        <th>Black</th>
+                    </tr>
+                </thead>
+                <tbody>${rows}</tbody>
+            </table>
+        </div>`;
+
+    // Scroll to latest move
+    const wrap = container.querySelector('.move-history-wrap');
+    if (wrap) wrap.scrollTop = wrap.scrollHeight;
 }
 function formatMove(m) {
     if (!m) return '';

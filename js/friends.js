@@ -127,7 +127,7 @@ function createFriendCard(user, type, requestId = null) {
     if (type === 'friend') {
         actionsHtml = `
             <button class="btn btn-primary btn-sm" onclick="challengeFriend('${user.id}', '${user.username}')">
-                <i class="bi bi-sword"></i> Challenge
+                <i class="bi bi-lightning-charge-fill"></i> Challenge
             </button>
             <button class="btn btn-danger btn-sm" onclick="removeFriend('${user.id}')">
                 <i class="bi bi-person-x"></i> Remove

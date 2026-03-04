@@ -1,11 +1,11 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en" data-theme="light">
 
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Chess Online Dashboard – View your stats, friends, and recent games.">
-    <title>Dashboard – Chess Online</title>
+    <meta name="description" content="Chess Online Dashboard â€“ View your stats, friends, and recent games.">
+    <title>Dashboard â€“ Chess Online</title>
     <script>try { document.documentElement.setAttribute('data-theme', localStorage.getItem('chess-theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light')); } catch (e) { }</script>
     <link rel="icon" type="image/png" href="assets/favicon.png">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
@@ -65,7 +65,7 @@
                     <i class="bi bi-cpu"></i> vs Computer
                 </button>
                 <button class="btn btn-secondary" id="btnChallengeFriend">
-                    <i class="bi bi-sword"></i> Challenge Friend
+                    <i class="bi bi-lightning-charge-fill"></i> Challenge Friend
                 </button>
             </div>
         </div>
@@ -73,19 +73,19 @@
         <!-- Stats Row -->
         <div class="stats-row">
             <div class="stat-card card">
-                <div class="stat-value" id="statWins">—</div>
+                <div class="stat-value" id="statWins">â€”</div>
                 <div class="stat-label">Wins</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-value" id="statLosses">—</div>
+                <div class="stat-value" id="statLosses">â€”</div>
                 <div class="stat-label">Losses</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-value" id="statDraws">—</div>
+                <div class="stat-value" id="statDraws">â€”</div>
                 <div class="stat-label">Draws</div>
             </div>
             <div class="stat-card card">
-                <div class="stat-value" id="statFriends">—</div>
+                <div class="stat-value" id="statFriends">â€”</div>
                 <div class="stat-label">Friends</div>
             </div>
         </div>
@@ -104,11 +104,11 @@
                             <div class="po-icon"><i class="bi bi-cpu"></i></div>
                             <div class="po-text">
                                 <h4>vs Computer</h4>
-                                <p>Practice against AI · Easy / Medium / Hard</p>
+                                <p>Practice against AI Â· Easy / Medium / Hard</p>
                             </div>
                         </button>
                         <button class="play-option" onclick="window.location='/Chess-Online/friends.html'">
-                            <div class="po-icon"><i class="bi bi-sword"></i></div>
+                            <div class="po-icon"><i class="bi bi-lightning-charge-fill"></i></div>
                             <div class="po-text">
                                 <h4>Challenge a Friend</h4>
                                 <p>Send a chess challenge to any friend</p>

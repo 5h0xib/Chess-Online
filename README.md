@@ -29,7 +29,7 @@ const SUPABASE_ANON_KEY = 'your-anon-key-here';
 ### Step 3 – Configure Auth
 
 In your Supabase Dashboard → **Authentication → URL Configuration**:
-- **Site URL**: `https://YOUR-GITHUB-USERNAME.github.io/Chess-Online`
+- **Site URL**: `https://5h0xib.github.io/Chess-Online`
 - **Redirect URLs**: same URL
 
 ### Step 4 – Deploy to GitHub Pages

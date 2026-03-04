@@ -120,9 +120,19 @@ async function initOnlineGame(gameId) {
     gameState.onlineGameId = gameId;
     gameState.myColor = game.player_white === gameUser.id ? 'white' : 'black';
 
+    // === REJOIN: save active game to localStorage ===
+    localStorage.setItem('chess-active-game', JSON.stringify({
+        gameId,
+        userId: gameUser.id
+    }));
+
     // Hide local mode selector
     const modeSelector = document.getElementById('gameModeSelector');
     if (modeSelector) modeSelector.style.display = 'none';
+
+    // Hide Back button, show Resign button (online-only controls)
+    document.getElementById('backBtn')?.classList.add('hidden');
+    document.getElementById('resignBtn')?.classList.remove('hidden');
 
     // Fetch opponent profile
     const oppId = gameState.myColor === 'white' ? game.player_black : game.player_white;
@@ -349,6 +359,10 @@ function handleGameOver(game) {
         type = iWon ? 'success' : 'error';
     }
     Notifications.showToast({ type, title: msg, message: 'Game Over!', duration: 0 });
+
+    // Clear rejoin record — game is done
+    localStorage.removeItem('chess-active-game');
+
     // Show overlay
     const overlay = document.getElementById('gameOverOverlay');
     if (overlay) {
@@ -363,6 +377,7 @@ async function resign() {
     if (!confirm('Are you sure you want to resign?')) return;
     const winner = gameState.myColor === 'white' ? 'black' : 'white';
     await sb.from('games').update({ status: 'finished', winner }).eq('id', gameState.onlineGameId);
+    localStorage.removeItem('chess-active-game');
     handleGameOver({ winner });
 }
 

@@ -342,7 +342,7 @@
     inset: 5%;
 }
 
-/* Pieces */
+/* Pieces – colors FIXED, not theme-inherited */
 .piece {
     position: absolute;
     inset: 0;
@@ -357,12 +357,23 @@
     transition: transform 0.12s ease;
 }
 
+/* White pieces: bright white + dark outline – visible on both board colors */
 .piece.white-piece {
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.5));
+    color: #ffffff;
+    text-shadow:
+        0 0 3px rgba(0, 0, 0, 0.95),
+        0 0 6px rgba(0, 0, 0, 0.8),
+        1px 1px 0 rgba(0, 0, 0, 0.7);
+    -webkit-text-stroke: 0.5px rgba(0, 0, 0, 0.6);
 }
 
+/* Black pieces: near-black + light outline – visible on both board colors */
 .piece.black-piece {
-    filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.4));
+    color: #1a1a1a;
+    text-shadow:
+        0 0 3px rgba(255, 255, 255, 0.65),
+        1px 1px 0 rgba(255, 255, 255, 0.5);
+    -webkit-text-stroke: 0.5px rgba(255, 255, 255, 0.3);
 }
 
 /* Game status bar */
@@ -414,33 +425,62 @@
     padding: 14px;
 }
 
-.move-history-list {
+/* Move history – table format */
+.move-history-wrap {
     max-height: 280px;
     overflow-y: auto;
     font-size: 0.8rem;
-    color: var(--fg-muted);
-    display: grid;
-    grid-template-columns: auto 1fr 1fr;
-    gap: 2px 8px;
     font-variant-numeric: tabular-nums;
 }
 
-.move-num {
+.move-history-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.move-history-table th {
+    padding: 4px 8px;
+    background: var(--bg-subtle);
+    color: var(--fg-muted);
+    font-weight: 600;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    text-align: left;
+    border-bottom: 1px solid var(--border-default);
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+
+.move-history-table td {
+    padding: 3px 8px;
+    vertical-align: middle;
+    border-bottom: 1px solid var(--border-muted);
+    color: var(--fg-default);
+}
+
+.move-history-table td:first-child {
     color: var(--fg-subtle);
+    width: 28px;
     font-weight: 600;
 }
 
-.move-white,
-.move-black {
-    padding: 2px 4px;
-    border-radius: 3px;
-    cursor: default;
+.move-history-table td.white-move {
+    font-weight: 600;
 }
 
-.move-white:hover,
-.move-black:hover {
-    background: var(--bg-muted);
-    color: var(--fg-default);
+.move-history-table td.black-move {
+    color: var(--fg-muted);
+}
+
+.move-history-table tr:last-child td {
+    border-bottom: none;
+}
+
+.move-history-table tr:hover td {
+    background: var(--bg-subtle);
+    cursor: default;
 }
 
 /* Promotion Modal */

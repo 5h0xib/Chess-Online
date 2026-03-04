@@ -12,6 +12,7 @@ async function initDashboard() {
 
         renderUserInfo();
         await Promise.all([loadStats(), loadFriendsSidebar(), loadRecentGames()]);
+        await checkAndShowRejoinBanner();
 
         Notifications.subscribeToGameChallenges(dashUser.id, dashProfile);
         Notifications.subscribeToFriendRequests(dashUser.id);
@@ -26,6 +27,63 @@ async function initDashboard() {
         hideLoader();
     }
 }
+
+// ===== REJOIN ACTIVE GAME =====
+async function checkAndShowRejoinBanner() {
+    try {
+        // First check localStorage for a quick hint
+        const saved = localStorage.getItem('chess-active-game');
+        let gameId = null;
+
+        if (saved) {
+            const parsed = JSON.parse(saved);
+            if (parsed.userId === dashUser.id) gameId = parsed.gameId;
+        }
+
+        // Also check the DB directly for any ongoing game (handles reload / other tab)
+        if (!gameId) {
+            const { data } = await sb.from('games')
+                .select('id')
+                .or(`player_white.eq.${dashUser.id},player_black.eq.${dashUser.id}`)
+                .eq('status', 'ongoing')
+                .order('created_at', { ascending: false })
+                .limit(1)
+                .maybeSingle();
+            if (data) gameId = data.id;
+        }
+
+        if (!gameId) return;
+
+        // Verify still ongoing
+        const { data: game } = await sb.from('games').select('id,status').eq('id', gameId).maybeSingle();
+        if (!game || game.status !== 'ongoing') {
+            localStorage.removeItem('chess-active-game');
+            return;
+        }
+
+        // Show rejoin banner
+        const container = document.querySelector('.dashboard-main');
+        if (!container) return;
+        const banner = document.createElement('div');
+        banner.className = 'card';
+        banner.style.cssText = 'padding:14px 20px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap;background:var(--accent-bg);border-color:var(--accent-emphasis);';
+        banner.innerHTML = `
+            <div style="display:flex;align-items:center;gap:10px;">
+                <i class="bi bi-controller" style="font-size:1.2rem;color:var(--accent-fg);"></i>
+                <div>
+                    <div style="font-weight:700;color:var(--fg-default);font-size:0.9rem;">You have an active game!</div>
+                    <div style="font-size:0.8rem;color:var(--fg-muted);">Your opponent may be waiting for you.</div>
+                </div>
+            </div>
+            <a href="/Chess-Online/game.html?gameId=${gameId}" class="btn btn-primary btn-sm">
+                <i class="bi bi-play-fill"></i> Rejoin Game
+            </a>`;
+        container.insertBefore(banner, container.firstChild);
+    } catch (e) {
+        console.warn('[Rejoin] Check failed:', e);
+    }
+}
+
 
 function renderUserInfo() {
     const el = (id) => document.getElementById(id);
@@ -107,7 +165,7 @@ async function loadFriendsSidebar() {
                 </div>
                 <div class="friend-actions">
                     <button class="btn btn-ghost btn-sm btn-icon" onclick="dashChallenge('${f.id}','${escHtml(f.username)}')" title="Challenge">
-                        <i class="bi bi-sword"></i>
+                        <i class="bi bi-lightning-charge-fill"></i>
                     </button>
                 </div>
             </div>`;
