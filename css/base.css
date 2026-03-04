@@ -403,87 +403,211 @@ p {
     padding: 16px;
 }
 
-/* ── BUTTONS ─────────────────────────────────────────────── */
+/* ── BUTTONS – Liquid Metal Aesthetic ─────────────────────── */
+@property --btn-angle {
+    syntax: '<angle>';
+    initial-value: 0deg;
+    inherits: false;
+}
+
+@keyframes border-spin {
+    to { --btn-angle: 360deg; }
+}
+
 .btn {
+    position: relative;
     display: inline-flex;
     align-items: center;
     justify-content: center;
     gap: 6px;
-    padding: 5px 12px;
+    padding: 6px 16px;
     border-radius: var(--radius-md);
     font-family: var(--font);
     font-size: 0.8125rem;
     font-weight: 600;
     cursor: pointer;
-    border: 1px solid transparent;
-    transition: all var(--transition);
+    border: none;
+    /* Metallic base: dark gradient with top highlight */
+    background: linear-gradient(155deg, #2e2e2e 0%, #111 55%, #252525 100%);
+    color: #c9d1d9;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.13),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 2px 6px rgba(0,0,0,0.35);
+    transition: color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease, transform 0.15s ease;
     white-space: nowrap;
     text-decoration: none !important;
     user-select: none;
     line-height: 1.4;
+    overflow: visible;
+    isolation: isolate;
 }
 
-.btn i {
-    font-size: 0.9rem;
+/* Conic-gradient border – grayscale at rest, blooms into color on hover */
+.btn::before {
+    content: "";
+    position: absolute;
+    inset: -1px;
+    border-radius: calc(var(--radius-md) + 1px);
+    padding: 1px;
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #555, #888, #555, #333, #555);
+    -webkit-mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    -webkit-mask-composite: xor;
+    mask:
+        linear-gradient(#000 0 0) content-box,
+        linear-gradient(#000 0 0);
+    mask-composite: exclude;
+    filter: grayscale(1) brightness(0.8);
+    opacity: 0.9;
+    transition: filter 0.35s ease, opacity 0.35s ease, background 0.35s ease;
+    pointer-events: none;
+    z-index: -1;
+}
+
+.btn:hover::before {
+    filter: grayscale(0) brightness(1.1);
+    opacity: 1;
+    animation: border-spin 3s linear infinite;
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #2f81f7, #a371f7, #f85149, #d29922, #2f81f7);
+}
+
+.btn i { font-size: 0.9rem; }
+
+.btn:hover {
+    background: linear-gradient(155deg, #3a3a3a 0%, #1a1a1a 55%, #303030 100%);
+    color: #f0f6fc;
+    box-shadow:
+        inset 0 1px 0 rgba(255,255,255,0.18),
+        inset 0 -1px 0 rgba(0,0,0,0.55),
+        0 4px 14px rgba(0,0,0,0.5),
+        0 0 0 1px rgba(255,255,255,0.04);
+    transform: translateY(-1px);
 }
 
 .btn:active {
-    transform: scale(0.97);
+    transform: scale(0.97) translateY(0px);
+    box-shadow:
+        inset 0 2px 6px rgba(0,0,0,0.5),
+        0 1px 2px rgba(0,0,0,0.3);
 }
 
-/* Primary */
+/* Primary – blue metallic */
 .btn-primary {
-    background: var(--accent-emphasis);
-    border-color: var(--accent-emphasis);
-    color: #fff;
+    background: linear-gradient(155deg, #1b4f8a 0%, #0a2240 55%, #163d70 100%);
+    color: #cce0ff;
+    box-shadow:
+        inset 0 1px 0 rgba(100,168,255,0.2),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 2px 8px rgba(0,30,80,0.5);
 }
-
+.btn-primary::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #2f81f7, #1a4a9e, #2f81f7, #0d3060, #2f81f7);
+    filter: grayscale(0.4) brightness(0.9);
+}
 .btn-primary:hover {
-    background: #0860ca;
-    border-color: #0860ca;
-    color: #fff;
+    background: linear-gradient(155deg, #255faa 0%, #0f2e52 55%, #1e5292 100%);
+    color: #e0eeff;
+    box-shadow:
+        inset 0 1px 0 rgba(150,200,255,0.25),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 4px 16px rgba(10,50,120,0.55),
+        0 0 20px rgba(47,129,247,0.15);
+}
+.btn-primary:hover::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #58a6ff, #79c0ff, #2f81f7, #1a5fdb, #58a6ff);
+    filter: grayscale(0) brightness(1.2);
 }
 
-/* Secondary */
+/* Secondary – neutral metallic */
 .btn-secondary {
-    background: var(--bg-subtle);
-    border-color: var(--border-default);
-    color: var(--fg-default);
+    background: linear-gradient(155deg, #2d2d2d 0%, #141414 55%, #242424 100%);
+    color: #adb5bd;
 }
-
 .btn-secondary:hover {
-    background: var(--bg-muted);
+    background: linear-gradient(155deg, #383838 0%, #1c1c1c 55%, #2e2e2e 100%);
+    color: #ced4da;
 }
 
-/* Danger */
+/* Danger – red metallic */
 .btn-danger {
-    background: var(--danger-emphasis);
-    border-color: var(--danger-emphasis);
-    color: #fff;
+    background: linear-gradient(155deg, #6e1212 0%, #2d0808 55%, #5a1010 100%);
+    color: #ffc9c9;
+    box-shadow:
+        inset 0 1px 0 rgba(255,100,100,0.18),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 2px 8px rgba(80,0,0,0.5);
 }
-
+.btn-danger::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #f85149, #7a1a1a, #f85149, #400e0e, #f85149);
+    filter: grayscale(0.4) brightness(0.9);
+}
 .btn-danger:hover {
-    background: #b91c1c;
-    border-color: #b91c1c;
-    color: #fff;
+    background: linear-gradient(155deg, #8a1818 0%, #3a0a0a 55%, #721414 100%);
+    color: #ffdada;
+    box-shadow:
+        inset 0 1px 0 rgba(255,140,140,0.2),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 4px 16px rgba(120,0,0,0.5),
+        0 0 20px rgba(248,81,73,0.15);
+}
+.btn-danger:hover::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #ff6b6b, #f85149, #c62020, #f85149, #ff6b6b);
+    filter: grayscale(0) brightness(1.2);
 }
 
-/* Ghost */
+/* Ghost – transparent metallic outline */
 .btn-ghost {
     background: transparent;
-    border-color: var(--border-default);
-    color: var(--fg-default);
+    color: var(--fg-muted);
+    box-shadow: none;
 }
-
+.btn-ghost::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #444, #666, #444, #333, #444);
+    filter: grayscale(1) brightness(0.7);
+    opacity: 0.7;
+}
 .btn-ghost:hover {
-    background: var(--bg-muted);
+    background: rgba(255,255,255,0.05);
+    color: var(--fg-default);
+    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
 }
 
-/* Success */
+/* Success – green metallic */
 .btn-success {
-    background: var(--success-emphasis);
-    border-color: var(--success-emphasis);
-    color: #fff;
+    background: linear-gradient(155deg, #1a5c2e 0%, #0c2814 55%, #165026 100%);
+    color: #c8f5d4;
+    box-shadow:
+        inset 0 1px 0 rgba(70,200,100,0.18),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 2px 8px rgba(0,50,20,0.5);
+}
+.btn-success::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #3fb950, #1a5c2e, #3fb950, #0c2814, #3fb950);
+    filter: grayscale(0.4) brightness(0.9);
+}
+.btn-success:hover {
+    background: linear-gradient(155deg, #226e38 0%, #102e18 55%, #1c6030 100%);
+    color: #d8ffe4;
+    box-shadow:
+        inset 0 1px 0 rgba(100,220,130,0.2),
+        inset 0 -1px 0 rgba(0,0,0,0.5),
+        0 4px 16px rgba(0,80,30,0.5),
+        0 0 20px rgba(63,185,80,0.15);
+}
+.btn-success:hover::before {
+    background: conic-gradient(from var(--btn-angle) at 50% 50%,
+        #56d364, #3fb950, #26a641, #3fb950, #56d364);
+    filter: grayscale(0) brightness(1.2);
 }
 
 /* Sizes */
@@ -493,7 +617,7 @@ p {
 }
 
 .btn-lg {
-    padding: 8px 20px;
+    padding: 9px 22px;
     font-size: 0.9rem;
 }
 
@@ -502,14 +626,12 @@ p {
 }
 
 .btn-icon {
-    padding: 4px 8px;
+    padding: 5px 9px;
 }
 
 /* ── LOADING SPINNER on Button ───────────────────────────── */
 @keyframes spin {
-    to {
-        transform: rotate(360deg);
-    }
+    to { transform: rotate(360deg); }
 }
 
 .btn-loading {
@@ -526,18 +648,18 @@ p {
     width: 14px;
     height: 14px;
     margin: -7px 0 0 -7px;
-    border: 2px solid rgba(255, 255, 255, 0.4);
+    border: 2px solid rgba(255, 255, 255, 0.3);
     border-top-color: #fff;
     border-radius: 50%;
     animation: spin 0.65s linear infinite;
 }
 
-/* Dark spinner for secondary/ghost buttons */
-.btn-ghost.btn-loading::after,
-.btn-secondary.btn-loading::after {
-    border-color: rgba(0, 0, 0, 0.15);
+/* spinner for ghost (lighter bg) */
+.btn-ghost.btn-loading::after {
+    border-color: rgba(150,150,150,0.3);
     border-top-color: var(--fg-default);
 }
+
 
 /* ── INPUTS ──────────────────────────────────────────────── */
 .input-group {
