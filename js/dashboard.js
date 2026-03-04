@@ -1,4 +1,4 @@
-﻿// ===== DASHBOARD MODULE =====
+// ===== DASHBOARD MODULE =====
 
 let dashProfile = null;
 let dashUser = null;
@@ -75,7 +75,7 @@ async function checkAndShowRejoinBanner() {
                     <div style="font-size:0.8rem;color:var(--fg-muted);">Your opponent may be waiting for you.</div>
                 </div>
             </div>
-            <a href="/Chess-Online/game.html?gameId=${gameId}" class="btn btn-primary btn-sm">
+            <a href="/game.html?gameId=${gameId}" class="btn btn-primary btn-sm">
                 <i class="bi bi-play-fill"></i> Rejoin Game
             </a>`;
         container.insertBefore(banner, container.firstChild);
@@ -148,7 +148,7 @@ async function loadFriendsSidebar() {
             list.innerHTML = `<div class="empty-state">
                 <div class="empty-icon"><i class="bi bi-people"></i></div>
                 <h3>No friends yet</h3>
-                <p><a href="/Chess-Online/friends.html">Find friends &rarr;</a></p>
+                <p><a href="/friends.html">Find friends &rarr;</a></p>
             </div>`;
             return;
         }
@@ -209,7 +209,7 @@ async function loadRecentGames() {
                 resultLabel = won ? 'Win' : 'Loss';
             }
             const date = new Date(g.created_at).toLocaleDateString();
-            return `<div class="game-row" onclick="window.location='/Chess-Online/game.html?view=${g.id}'">
+            return `<div class="game-row" onclick="window.location='/game.html?view=${g.id}'">
                 <div class="game-icon"><i class="bi bi-controller"></i></div>
                 <div class="game-info">
                     <div class="game-opponent">vs ${escHtml(oppName || 'Unknown')}</div>
@@ -235,20 +235,20 @@ function subscribeToOnlineStatus() {
 // ===== ACTIONS =====
 function setupActions() {
     document.getElementById('btnPlayComputer')?.addEventListener('click', () => {
-        window.location.href = '/Chess-Online/game.html?mode=pvc';
+        window.location.href = '/game.html?mode=pvc';
     });
     document.getElementById('btnChallengeFriend')?.addEventListener('click', () => {
-        window.location.href = '/Chess-Online/friends.html';
+        window.location.href = '/friends.html';
     });
     document.getElementById('btnFriends')?.addEventListener('click', () => {
-        window.location.href = '/Chess-Online/friends.html';
+        window.location.href = '/friends.html';
     });
     document.getElementById('btnHistory')?.addEventListener('click', () => {
-        window.location.href = '/Chess-Online/history.html';
+        window.location.href = '/history.html';
     });
     document.getElementById('logoutBtn')?.addEventListener('click', async () => {
         await Auth.signOut();
-        window.location.href = '/Chess-Online/index.html';
+        window.location.href = '/index.html';
     });
 }
 

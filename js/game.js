@@ -105,13 +105,13 @@ async function initOnlineGame(gameId) {
     const { data: game, error } = await sb.from('games').select('*').eq('id', gameId).single();
     if (error || !game) {
         Notifications.showToast({ type: 'error', title: 'Game not found', message: 'This game does not exist or you are not a player.' });
-        setTimeout(() => window.location.href = '/Chess-Online/dashboard.html', 2500);
+        setTimeout(() => window.location.href = '/dashboard.html', 2500);
         return;
     }
 
     if (game.player_white !== gameUser.id && game.player_black !== gameUser.id) {
         Notifications.showToast({ type: 'error', title: 'Access denied', message: 'You are not a player in this game.' });
-        setTimeout(() => window.location.href = '/Chess-Online/dashboard.html', 2500);
+        setTimeout(() => window.location.href = '/dashboard.html', 2500);
         return;
     }
 

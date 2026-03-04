@@ -141,7 +141,7 @@ async function acceptGameChallenge(challengeId, challengerId, myId) {
             .eq('id', challengeId);
 
         // Navigate to game
-        window.location.href = `/Chess-Online/game.html?gameId=${game.id}`;
+        window.location.href = `/game.html?gameId=${game.id}`;
     } catch (e) {
         console.error('Failed to accept challenge:', e);
         showToast({ type: 'error', title: 'Error', message: 'Could not start game. Try again.' });
@@ -171,7 +171,7 @@ function subscribeToFriendRequests(userId) {
                 title: 'Friend Request',
                 message: `${name} sent you a friend request`,
                 actionLabel: 'View',
-                onAction: () => { window.location.href = '/Chess-Online/friends.html'; }
+                onAction: () => { window.location.href = '/friends.html'; }
             });
         })
         .subscribe();
@@ -197,7 +197,7 @@ function subscribeToChallengeAccepted(userId) {
                     duration: 3000
                 });
                 setTimeout(() => {
-                    window.location.href = `/Chess-Online/game.html?gameId=${ch.game_id}`;
+                    window.location.href = `/game.html?gameId=${ch.game_id}`;
                 }, 1500);
             } else if (ch.status === 'rejected') {
                 showToast({ type: 'error', title: 'Challenge Declined', message: 'Your friend declined the challenge.' });

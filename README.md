@@ -1,4 +1,4 @@
-# ♚ Chess Online
+﻿# ♚ Chess Online
 
 A full-stack multiplayer chess web app built with HTML/CSS/JavaScript + **Supabase** (Auth, Database, Realtime).
 
@@ -29,7 +29,7 @@ const SUPABASE_ANON_KEY = 'your-anon-key-here';
 ### Step 3 – Configure Auth
 
 In your Supabase Dashboard → **Authentication → URL Configuration**:
-- **Site URL**: `https://5h0xib.github.io/Chess-Online`
+- **Site URL**: `https://chess.woxflow.in`
 - **Redirect URLs**: same URL
 
 ### Step 4 – Deploy to GitHub Pages

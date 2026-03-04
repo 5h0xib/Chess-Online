@@ -116,7 +116,7 @@ async function requireAuth() {
     try {
         const user = await getCurrentUser();
         if (!user) {
-            window.location.href = '/Chess-Online/index.html';
+            window.location.href = '/index.html';
             return null;
         }
 
@@ -133,7 +133,7 @@ async function requireAuth() {
         return { user, profile };
     } catch (err) {
         console.error('[requireAuth] Unexpected error:', err);
-        window.location.href = '/Chess-Online/index.html';
+        window.location.href = '/index.html';
         return null;
     }
 }
@@ -144,7 +144,7 @@ async function requireAuth() {
 async function redirectIfLoggedIn() {
     try {
         const user = await getCurrentUser();
-        if (user) window.location.href = '/Chess-Online/dashboard.html';
+        if (user) window.location.href = '/dashboard.html';
     } catch (e) { /* ignore */ }
 }
 
