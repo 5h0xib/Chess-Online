@@ -147,7 +147,7 @@ function highlightSquares() {
             const msq = document.querySelector(`[data-row="${move.row}"][data-col="${move.col}"]`);
             if (!msq) return;
             if (gameState.board[move.row][move.col]) {
-                msq.classList.add('legal-capture');
+                msq.classList.add('capture-move');
             } else {
                 msq.classList.add('legal-move');
             }
@@ -156,7 +156,7 @@ function highlightSquares() {
 }
 function removeHighlights() {
     document.querySelectorAll('.square').forEach(sq => {
-        sq.classList.remove('selected', 'legal-move', 'legal-capture');
+        sq.classList.remove('selected', 'legal-move', 'capture-move');
     });
 }
 
