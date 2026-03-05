@@ -381,7 +381,7 @@ function handleGameOver(game) {
                 iconContainer.innerHTML = '<i class="bi bi-trophy" style="font-size:2.5rem;color:var(--accent-fg);display:block;margin-bottom:12px;"></i>';
             } else {
                 const imgName = (winner === gameState.myColor) ? 'you-win.png' : 'you-lost.png';
-                iconContainer.innerHTML = `<img src="assets/${imgName}" alt="${msg}" style="height:60px; margin-bottom:12px;">`;
+                iconContainer.innerHTML = `<img src="assets/${imgName}" alt="${msg}" style="display:block; margin:0 auto 12px auto; height:120px;">`;
             }
         }
 
