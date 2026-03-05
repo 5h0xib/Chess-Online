@@ -83,6 +83,10 @@ function setupLocalControls() {
         if (pvcSection) pvcSection.style.display = gameState.gameMode === 'pvc' ? 'block' : 'none';
     });
 
+    document.getElementById('undoBtn')?.addEventListener('click', () => {
+        ChessEngine.undoMove();
+    });
+
     document.querySelectorAll('input[name="gameMode"]').forEach(r => {
         r.addEventListener('change', (e) => {
             gameState.gameMode = e.target.value;
@@ -166,8 +170,11 @@ async function initOnlineGame(gameId) {
         handleGameOver(game);
     }
 
-    // Disable reset in online mode
-    document.getElementById('resetBtn')?.setAttribute('disabled', 'true');
+    // Hide reset and undo in online mode
+    const resetBtn = document.getElementById('resetBtn');
+    if (resetBtn) resetBtn.style.display = 'none';
+    const undoBtn = document.getElementById('undoBtn');
+    if (undoBtn) undoBtn.style.display = 'none';
 
     // Online resign button
     document.getElementById('resignBtn')?.addEventListener('click', () => resign());
@@ -367,6 +374,17 @@ function handleGameOver(game) {
     const overlay = document.getElementById('gameOverOverlay');
     if (overlay) {
         overlay.querySelector('.result-text').textContent = msg;
+
+        const iconContainer = document.getElementById('gameOverIconContainer');
+        if (iconContainer) {
+            if (!winner || winner === 'draw') {
+                iconContainer.innerHTML = '<i class="bi bi-trophy" style="font-size:2.5rem;color:var(--accent-fg);display:block;margin-bottom:12px;"></i>';
+            } else {
+                const imgName = (winner === gameState.myColor) ? 'you-win.png' : 'you-lost.png';
+                iconContainer.innerHTML = `<img src="assets/${imgName}" alt="${msg}" style="height:60px; margin-bottom:12px;">`;
+            }
+        }
+
         overlay.classList.add('active');
     }
 }

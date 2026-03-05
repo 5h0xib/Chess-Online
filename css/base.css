@@ -969,6 +969,7 @@ p {
     display: block;
     position: absolute;
     inset: 0;
+    border: 1px solid rgb(255, 255, 255)
 }
 
 /* Card 2: middle (lighter blue) */
@@ -979,6 +980,7 @@ p {
 .stack__card:nth-child(2)::before {
     animation-delay: calc(var(--stack-dur) * (-1 + var(--stack-delay)));
     background-color: hsl(223, 90%, 75%);
+    border: 1px solid rgb(87, 87, 87)
 }
 
 /* Card 3: back (lightest, with chess-piece pattern) */
@@ -996,7 +998,7 @@ p {
     background-position: center;
     background-repeat: no-repeat;
     background-size: 45% 45%;
-    border: 2px solid rgb(0, 0, 0);
+    border: 1px solid rgb(0, 0, 0);
 }
 
 /* Card animation keyframes (SCSS $vars replaced with cubic-bezier) */

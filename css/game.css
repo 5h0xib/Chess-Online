@@ -116,9 +116,6 @@
     background: #1f2328;
 }
 
-[data-theme="dark"] .black-panel .piece-color-dot {
-    background: #e6edf3;
-}
 
 .pp-info {
     flex: 1;

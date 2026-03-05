@@ -17,10 +17,10 @@
 
     <div class="page-loader" id="pageLoader">
         <div class="stack">
-        <div class="stack__card"></div>
-        <div class="stack__card"></div>
-        <div class="stack__card"></div>
-    </div>
+            <div class="stack__card"></div>
+            <div class="stack__card"></div>
+            <div class="stack__card"></div>
+        </div>
     </div>
 
     <nav class="topnav">
@@ -101,8 +101,6 @@
             </div>
         </div>
 
-        <!-- Status Alert -->
-        <div id="gameAlerts"></div>
 
         <!-- Board + Sidebar -->
         <div class="board-container">
@@ -125,6 +123,14 @@
                 <div class="game-status-display white-turn" id="gameStatus">
                     Turn: <span id="currentTurn">White</span>
                 </div>
+                <div id="aiThinkingText"
+                    style="display:none; text-align:center; padding: 10px; color: var(--accent-fg); font-weight: bold; font-size: 0.9rem;">
+                    AI is thinking...
+                </div>
+                <!-- Status Alert -->
+                <div id="gameAlerts"
+                    style="display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 22px; color: rgb(255, 0, 0);">
+                </div>
             </div>
 
             <!-- Sidebar -->
@@ -138,6 +144,9 @@
                     <div class="move-history-list" id="moveHistoryList"></div>
                 </div>
                 <div class="sidebar-card card" style="display:flex;flex-direction:column;gap:8px;">
+                    <button class="btn btn-secondary btn-full" id="undoBtn">
+                        <i class="bi bi-arrow-counterclockwise"></i> Undo Move
+                    </button>
                     <button class="btn btn-secondary btn-full" id="resetBtn">
                         <i class="bi bi-arrow-clockwise"></i> New Game
                     </button>
@@ -169,8 +178,10 @@
     <!-- Game Over Overlay -->
     <div class="modal-overlay" id="gameOverOverlay">
         <div class="modal" style="text-align:center;">
-            <i class="bi bi-trophy"
-                style="font-size:2.5rem;color:var(--accent-fg);display:block;margin-bottom:12px;"></i>
+            <div id="gameOverIconContainer">
+                <i class="bi bi-trophy"
+                    style="font-size:2.5rem;color:var(--accent-fg);display:block;margin-bottom:12px;"></i>
+            </div>
             <div class="result-text"
                 style="font-size:1.6rem;font-weight:800;margin-bottom:8px;color:var(--fg-default);"></div>
             <p style="margin-bottom:20px;">Game Over</p>

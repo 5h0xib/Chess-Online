@@ -15,6 +15,7 @@ let gameState = {
     legalMoves: [],
     gameStatus: 'active',
     moveHistory: [],
+    stateHistory: [],
     enPassantTarget: null,
     castlingRights: {
         white: { kingSide: true, queenSide: true },
@@ -282,6 +283,9 @@ function getCastlingMoves(row, col, color) {
 
 // ===== MAKE MOVE =====
 function makeMove(fromRow, fromCol, toRow, toCol, promotionPiece = null) {
+    // Save state before move
+    gameState.stateHistory.push(captureGameState());
+
     const piece = gameState.board[fromRow][fromCol];
     const capturedPiece = gameState.board[toRow][toCol];
     const move = gameState.legalMoves.find(m => m.row === toRow && m.col === toCol);
@@ -626,6 +630,7 @@ function saveGameState() {
         localStorage.setItem(STORAGE_KEY, JSON.stringify({
             board: gameState.board, currentTurn: gameState.currentTurn,
             gameStatus: gameState.gameStatus, moveHistory: gameState.moveHistory,
+            stateHistory: gameState.stateHistory,
             enPassantTarget: gameState.enPassantTarget, castlingRights: gameState.castlingRights,
             kingMoved: gameState.kingMoved, rookMoved: gameState.rookMoved,
             gameMode: gameState.gameMode, aiDifficulty: gameState.aiDifficulty
@@ -653,6 +658,7 @@ function resetGame() {
         kingMoved: { white: false, black: false },
         rookMoved: { white: { kingSide: false, queenSide: false }, black: { kingSide: false, queenSide: false } },
         gameMode: mode, aiDifficulty: diff, isAiThinking: false,
+        stateHistory: [],
         onlineGameId: null, myColor: null, isOnlineGame: false, pendingPromotion: null
     };
     initializeBoard(); renderBoard(); clearGameAlerts(); updateMoveHistory();
@@ -776,7 +782,9 @@ function getBestMove() {
 }
 function makeComputerMove() {
     gameState.isAiThinking = true;
-    showGameAlert('AI is thinking...', 'ai-thinking');
+    const aiText = document.getElementById('aiThinkingText');
+    if (aiText) aiText.style.display = 'block';
+
     setTimeout(() => {
         const bm = getBestMove();
         if (bm) {
@@ -786,7 +794,56 @@ function makeComputerMove() {
             clearSelection();
         }
         gameState.isAiThinking = false;
+        if (aiText) aiText.style.display = 'none';
     }, 100);
+}
+
+// ===== UNDO LOGIC =====
+function undoMove() {
+    if (gameState.isOnlineGame) return;
+    if (gameState.stateHistory.length === 0) return;
+
+    let pops = 1;
+    if (gameState.gameMode === 'pvc' && !gameState.isAiThinking && gameState.stateHistory.length >= 2) {
+        pops = 2; // Undo both AI and Player moves
+    }
+
+    let prevStateStr = null;
+    for (let i = 0; i < pops; i++) {
+        prevStateStr = gameState.stateHistory.pop();
+    }
+
+    if (prevStateStr) {
+        restoreGameState(prevStateStr);
+        clearSelection();
+        clearGameAlerts();
+        renderBoard();
+        updateMoveHistory();
+        saveGameState();
+    }
+}
+function captureGameState() {
+    return JSON.stringify({
+        board: gameState.board,
+        currentTurn: gameState.currentTurn,
+        gameStatus: gameState.gameStatus,
+        moveHistory: gameState.moveHistory, // stringify deep clones this array
+        enPassantTarget: gameState.enPassantTarget,
+        castlingRights: gameState.castlingRights,
+        kingMoved: gameState.kingMoved,
+        rookMoved: gameState.rookMoved
+    });
+}
+function restoreGameState(stateStr) {
+    const s = JSON.parse(stateStr);
+    gameState.board = s.board;
+    gameState.currentTurn = s.currentTurn;
+    gameState.gameStatus = s.gameStatus;
+    gameState.moveHistory = s.moveHistory;
+    gameState.enPassantTarget = s.enPassantTarget;
+    gameState.castlingRights = s.castlingRights;
+    gameState.kingMoved = s.kingMoved;
+    gameState.rookMoved = s.rookMoved;
 }
 
 // Expose engine for use in game.js
@@ -794,5 +851,5 @@ window.ChessEngine = {
     gameState, initializeBoard, loadBoardState, renderBoard, resetGame,
     makeMove, getLegalMoves, isKingInCheck, checkGameStatus,
     saveGameState, loadGameState, updateMoveHistory,
-    makeComputerMove, getBestMove
+    makeComputerMove, getBestMove, undoMove
 };
