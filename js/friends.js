@@ -35,7 +35,7 @@ async function loadFriends() {
 
     const { data, error } = await sb
         .from('friends')
-        .select('friend_id, users!friends_friend_id_fkey(id, username, online_status)')
+        .select('friend_id, users!friends_friend_id_fkey(id, username, online_status, last_seen)')
         .eq('user_id', currentUserId);
 
     if (error || !data?.length) {
@@ -62,7 +62,7 @@ async function loadPendingReceived() {
 
     const { data } = await sb
         .from('friend_requests')
-        .select('id, sender_id, users!friend_requests_sender_id_fkey(id, username, online_status)')
+        .select('id, sender_id, users!friend_requests_sender_id_fkey(id, username, online_status, last_seen)')
         .eq('receiver_id', currentUserId)
         .eq('status', 'pending');
 
@@ -98,7 +98,7 @@ async function loadPendingSent() {
 
     const { data } = await sb
         .from('friend_requests')
-        .select('id, receiver_id, users!friend_requests_receiver_id_fkey(id, username, online_status)')
+        .select('id, receiver_id, users!friend_requests_receiver_id_fkey(id, username, online_status, last_seen)')
         .eq('sender_id', currentUserId)
         .eq('status', 'pending');
 
@@ -121,7 +121,7 @@ function createFriendCard(user, type, requestId = null) {
     card.className = 'friend-card';
 
     const initial = (user.username || '?')[0].toUpperCase();
-    const isOnline = user.online_status;
+    const isOnline = Auth.isUserOnline(user);
 
     let actionsHtml = '';
     if (type === 'friend') {
@@ -260,7 +260,7 @@ async function searchUsers(query) {
     const results = document.getElementById('searchResults');
     const { data } = await sb
         .from('users')
-        .select('id, username, online_status')
+        .select('id, username, online_status, last_seen')
         .ilike('username', `%${query}%`)
         .neq('id', currentUserId)
         .limit(8);
@@ -276,7 +276,7 @@ async function searchUsers(query) {
             <div class="avatar avatar-sm">${u.username[0].toUpperCase()}</div>
             <div class="sr-info">
                 <div class="sr-name">${escapeHtml(u.username)}</div>
-                <div class="sr-status">${u.online_status
+                <div class="sr-status">${Auth.isUserOnline(u)
             ? '<i class="bi bi-circle-fill" style="color:var(--success-emphasis);font-size:0.5rem;"></i> Online'
             : '<i class="bi bi-circle" style="color:var(--fg-subtle);font-size:0.5rem;"></i> Offline'}
                 </div>

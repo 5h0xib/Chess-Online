@@ -11,7 +11,8 @@ CREATE TABLE IF NOT EXISTS public.users (
     username    TEXT NOT NULL UNIQUE,
     email       TEXT NOT NULL,
     created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW(),
-    online_status BOOLEAN NOT NULL DEFAULT FALSE
+    online_status BOOLEAN NOT NULL DEFAULT FALSE,
+    last_seen     TIMESTAMPTZ
 );
 
 ALTER TABLE public.users ENABLE ROW LEVEL SECURITY;

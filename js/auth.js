@@ -1,5 +1,7 @@
 // ===== AUTH MODULE =====
 
+let _heartbeatInterval = null;
+
 /**
  * Sign up a new user and create their profile
  */
@@ -41,6 +43,7 @@ async function signIn(email, password) {
  * Sign out current user
  */
 async function signOut() {
+    if (_heartbeatInterval) { clearInterval(_heartbeatInterval); _heartbeatInterval = null; }
     const user = await getCurrentUser();
     if (user) {
         await sb.from('users').update({ online_status: false }).eq('id', user.id);
@@ -122,11 +125,24 @@ async function requireAuth() {
 
         const profile = await ensureProfile(user);
 
-        // Set online (best-effort, non-blocking)
-        sb.from('users').update({ online_status: true }).eq('id', user.id).then(() => { });
+        // ── Presence heartbeat ──
+        // Sends a pulse every 30s. Readers treat a user as "online" only
+        // if last_seen is within the last 2 minutes, so a closed browser
+        // (= no more heartbeats) naturally expires the status.
+        const sendHeartbeat = () => {
+            sb.from('users').update({
+                online_status: true,
+                last_seen: new Date().toISOString()
+            }).eq('id', user.id).then(() => {});
+        };
+        sendHeartbeat(); // immediate first pulse
 
-        // Mark offline on tab close
+        if (_heartbeatInterval) clearInterval(_heartbeatInterval);
+        _heartbeatInterval = setInterval(sendHeartbeat, 30000);
+
+        // Best-effort immediate offline on tab/browser close
         window.addEventListener('beforeunload', () => {
+            if (_heartbeatInterval) clearInterval(_heartbeatInterval);
             sb.from('users').update({ online_status: false }).eq('id', user.id);
         });
 
@@ -148,9 +164,20 @@ async function redirectIfLoggedIn() {
     } catch (e) { /* ignore */ }
 }
 
+/**
+ * Determine if a user object represents a genuinely online user.
+ * Requires online_status === true AND a recent heartbeat (< 2 minutes).
+ * Handles: explicit sign-out (online_status=false), browser crash (last_seen stale).
+ */
+function isUserOnline(userObj) {
+    if (!userObj || !userObj.online_status) return false;
+    if (!userObj.last_seen) return false;
+    return (Date.now() - new Date(userObj.last_seen).getTime()) < 120000; // 2 min
+}
+
 // Expose globally
 window.Auth = {
     signUp, signIn, signOut,
     getCurrentUser, getUserProfile, ensureProfile,
-    requireAuth, redirectIfLoggedIn
+    requireAuth, redirectIfLoggedIn, isUserOnline
 };

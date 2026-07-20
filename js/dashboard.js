@@ -140,7 +140,7 @@ async function loadFriendsSidebar() {
     try {
         const { data } = await sb
             .from('friends')
-            .select('friend_id, users!friends_friend_id_fkey(id, username, online_status)')
+            .select('friend_id, users!friends_friend_id_fkey(id, username, online_status, last_seen)')
             .eq('user_id', dashUser.id)
             .limit(10);
 
@@ -158,10 +158,10 @@ async function loadFriendsSidebar() {
             if (!f) return '';
             return `<div class="friend-item">
                 <div class="avatar avatar-sm">${f.username[0].toUpperCase()}</div>
-                <div class="online-dot ${f.online_status ? 'online' : ''}"></div>
+                <div class="online-dot ${Auth.isUserOnline(f) ? 'online' : ''}"></div>
                 <div class="friend-info">
                     <div class="friend-name">${escHtml(f.username)}</div>
-                    <div class="friend-status">${f.online_status ? 'Online' : 'Offline'}</div>
+                    <div class="friend-status">${Auth.isUserOnline(f) ? 'Online' : 'Offline'}</div>
                 </div>
                 <div class="friend-actions">
                     <button class="btn btn-ghost btn-sm btn-icon" onclick="dashChallenge('${f.id}','${escHtml(f.username)}')" title="Challenge">
