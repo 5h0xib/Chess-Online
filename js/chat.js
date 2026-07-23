@@ -6,6 +6,7 @@ let chatChannel = null;
 let _chatGameId = null;
 let _chatUserId = null;
 let _chatUsername = '';
+let _chatReadOnly = false;
 
 /**
  * Initialize chat for an online game.
@@ -13,19 +14,29 @@ let _chatUsername = '';
  * @param {string} userId  – current user's auth ID
  * @param {string} username – current user's display name
  */
-async function initChat(gameId, userId, username) {
+async function initChat(gameId, userId, username, readOnly = false) {
     _chatGameId = gameId;
     _chatUserId = userId;
     _chatUsername = username;
+    _chatReadOnly = readOnly;
 
     // Show the chat card (hidden by default for local/AI games)
     const card = document.getElementById('gameChatCard');
     if (!card) return;
     card.style.display = 'flex';
 
-    wireChatInput();
+    if (readOnly) {
+        // Hide input bar in read-only mode
+        const inputBar = card.querySelector('.chat-input-bar');
+        if (inputBar) inputBar.style.display = 'none';
+    } else {
+        wireChatInput();
+    }
+
     await loadChatHistory();
-    subscribeToChatMessages();
+
+    // Only subscribe to realtime for active games
+    if (!readOnly) subscribeToChatMessages();
 }
 
 // ===== INPUT WIRING =====
@@ -70,6 +81,10 @@ async function loadChatHistory() {
             hideEmptyState();
             data.forEach(msg => appendBubble(msg));
             scrollChatToBottom();
+        } else if (_chatReadOnly) {
+            // Show a different message for past games with no chat
+            const empty = document.getElementById('chatEmpty');
+            if (empty) empty.innerHTML = '<i class="bi bi-chat-text" style="font-size:1.4rem;display:block;margin-bottom:6px;opacity:0.5;"></i>No messages were sent during this game';
         }
     } catch (e) {
         console.error('[Chat] Failed to load history:', e);

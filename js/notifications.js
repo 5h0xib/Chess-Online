@@ -179,9 +179,17 @@ function subscribeToFriendRequests(userId) {
 
 /**
  * Subscribe to challenge status updates (so challenger knows if accepted).
+ * Idempotent – safe to call multiple times (unsubscribes previous channel first).
  */
+let challengeAcceptedChannel = null;
 function subscribeToChallengeAccepted(userId) {
-    sb.channel(`challenge_accepted:${userId}`)
+    // Tear down any existing subscription to avoid duplicate channel errors
+    if (challengeAcceptedChannel) {
+        challengeAcceptedChannel.unsubscribe();
+        challengeAcceptedChannel = null;
+    }
+
+    challengeAcceptedChannel = sb.channel(`challenge_accepted:${userId}`)
         .on('postgres_changes', {
             event: 'UPDATE',
             schema: 'public',
@@ -209,6 +217,7 @@ function subscribeToChallengeAccepted(userId) {
 function unsubscribeAll() {
     if (challengeChannel) challengeChannel.unsubscribe();
     if (friendRequestChannel) friendRequestChannel.unsubscribe();
+    if (challengeAcceptedChannel) { challengeAcceptedChannel.unsubscribe(); challengeAcceptedChannel = null; }
 }
 
 window.Notifications = {

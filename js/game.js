@@ -418,6 +418,9 @@ async function initViewMode(gameId) {
     renderBoard(false);
     updateMoveHistory();
 
+    // Show chat history (read-only, no input bar)
+    GameChat.initChat(gameId, gameUser.id, gameProfile.username, true);
+
     // Disable clicks in view mode
     document.getElementById('chessboard')?.querySelectorAll('.square').forEach(sq => {
         sq.style.pointerEvents = 'none';
