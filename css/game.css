@@ -78,22 +78,20 @@
     display: flex;
     align-items: center;
     justify-content: space-between;
-    gap: 12px;
-    background: var(--bg-canvas);
-    border: 1px solid var(--border-default);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.05);
-    border-radius: 24px;
-    padding: 12px 16px;
+    gap: 8px; /* Tighter for mobile */
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid transparent;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+    border-radius: var(--radius-md);
+    padding: 10px 14px;
     position: relative;
     overflow: hidden;
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
+    color: var(--fg-default);
 }
 
-[data-theme="dark"] .players-bar {
-    background: rgba(22, 27, 34, 0.6);
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.25);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+[data-theme="light"] .players-bar {
+    background: rgba(0, 0, 0, 0.04);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
 }
 
 .player-panel {
@@ -211,42 +209,49 @@
 }
 
 .game-alert {
-    padding: 10px 16px;
+    padding: 12px 16px;
     border-radius: var(--radius-md);
     font-size: 0.875rem;
     font-weight: 600;
     display: flex;
     align-items: center;
-    gap: 8px;
+    gap: 10px;
+    background: var(--bg-canvas);
+    border: 1px solid var(--border-default);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    animation: fadeIn 0.3s ease;
+}
+
+[data-theme="dark"] .game-alert {
+    background: rgba(22, 27, 34, 0.8);
+    border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .game-alert i {
-    font-size: 1rem;
+    font-size: 1.1rem;
 }
 
 .game-alert.check {
-    background: var(--warn-bg);
-    color: var(--warn-fg);
-    border: 1px solid var(--warn-fg);
+    border-left: 4px solid var(--warn-fg);
 }
+.game-alert.check i { color: var(--warn-fg); }
 
 .game-alert.checkmate {
-    background: var(--danger-bg);
-    color: var(--danger-fg);
-    border: 1px solid var(--danger-fg);
+    border-left: 4px solid var(--danger-fg);
 }
+.game-alert.checkmate i { color: var(--danger-fg); }
 
 .game-alert.stalemate {
-    background: var(--bg-muted);
-    color: var(--fg-muted);
-    border: 1px solid var(--border-default);
+    border-left: 4px solid var(--fg-muted);
 }
+.game-alert.stalemate i { color: var(--fg-muted); }
 
 .game-alert.info {
-    background: var(--accent-bg);
-    color: var(--accent-fg);
-    border: 1px solid var(--accent-fg);
+    border-left: 4px solid var(--accent-fg);
 }
+.game-alert.info i { color: var(--accent-fg); }
 
 /* ── BOARD CONTAINER ──────────────────────────────────────── */
 .board-container {
