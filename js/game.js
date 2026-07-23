@@ -165,6 +165,9 @@ async function initOnlineGame(gameId) {
     subscribeToMoves(gameId);
     subscribeToGameUpdates(gameId);
 
+    // Initialize in-game chat
+    GameChat.initChat(gameId, gameUser.id, gameProfile.username);
+
     // Handle finished game
     if (game.status === 'finished') {
         handleGameOver(game);

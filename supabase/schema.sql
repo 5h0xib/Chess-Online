@@ -219,7 +219,41 @@ CREATE POLICY "challenges_update" ON public.game_challenges
     FOR UPDATE USING (auth.uid() = challenged_id OR auth.uid() = challenger_id);
 
 -- ============================================================
--- 9. ENABLE SUPABASE REALTIME
+-- 9. GAME MESSAGES TABLE (in-game chat)
+-- ============================================================
+CREATE TABLE IF NOT EXISTS public.game_messages (
+    id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+    game_id     UUID NOT NULL REFERENCES public.games(id) ON DELETE CASCADE,
+    sender_id   UUID NOT NULL REFERENCES public.users(id) ON DELETE CASCADE,
+    content     TEXT NOT NULL CHECK (char_length(content) <= 500),
+    created_at  TIMESTAMPTZ NOT NULL DEFAULT NOW()
+);
+
+ALTER TABLE public.game_messages ENABLE ROW LEVEL SECURITY;
+
+-- Only players in the game can read messages
+CREATE POLICY "game_messages_select" ON public.game_messages
+    FOR SELECT USING (
+        EXISTS (
+            SELECT 1 FROM public.games g
+            WHERE g.id = game_id
+            AND (g.player_white = auth.uid() OR g.player_black = auth.uid())
+        )
+    );
+
+-- Only players in the game can send messages (must be sender)
+CREATE POLICY "game_messages_insert" ON public.game_messages
+    FOR INSERT WITH CHECK (
+        auth.uid() = sender_id AND
+        EXISTS (
+            SELECT 1 FROM public.games g
+            WHERE g.id = game_id
+            AND (g.player_white = auth.uid() OR g.player_black = auth.uid())
+        )
+    );
+
+-- ============================================================
+-- 10. ENABLE SUPABASE REALTIME
 -- ============================================================
 -- Run these in the Supabase SQL editor to enable realtime on relevant tables
 ALTER PUBLICATION supabase_realtime ADD TABLE public.moves;
@@ -227,3 +261,4 @@ ALTER PUBLICATION supabase_realtime ADD TABLE public.game_challenges;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.friend_requests;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.games;
 ALTER PUBLICATION supabase_realtime ADD TABLE public.users;
+ALTER PUBLICATION supabase_realtime ADD TABLE public.game_messages;

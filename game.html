@@ -159,6 +159,24 @@
                         Click a piece to select it,<br>then click a highlighted square to move.
                     </p>
                 </div>
+                <div class="sidebar-card card chat-card" id="gameChatCard" style="display:none">
+                    <div class="chat-header">
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <span>Game Chat</span>
+                    </div>
+                    <div class="chat-messages" id="chatMessagesList">
+                        <div class="chat-empty" id="chatEmpty">
+                            <i class="bi bi-chat-text" style="font-size:1.4rem;display:block;margin-bottom:6px;opacity:0.5;"></i>
+                            Send a message to your opponent
+                        </div>
+                    </div>
+                    <div class="chat-input-bar">
+                        <input type="text" id="chatInput" placeholder="Type a message…" autocomplete="off" maxlength="500">
+                        <button class="btn btn-primary btn-sm" id="chatSendBtn">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
+                    </div>
+                </div>
             </aside>
         </div>
 
@@ -203,6 +221,7 @@
     <script src="js/auth.js"></script>
     <script src="js/notifications.js"></script>
     <script src="js/chess-engine.js"></script>
+    <script src="js/chat.js"></script>
     <script src="js/game.js"></script>
     <script src="js/theme.js"></script>
     <script>
