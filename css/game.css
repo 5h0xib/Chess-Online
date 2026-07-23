@@ -253,19 +253,39 @@
 }
 .game-alert.info i { color: var(--accent-fg); }
 
-/* ── BOARD CONTAINER ──────────────────────────────────────── */
+/* ── BOARD CONTAINER & LAYOUT ───────────────────────────────── */
 .board-container {
     display: flex;
     gap: 20px;
     align-items: flex-start;
+    flex-wrap: wrap; /* Allow columns to wrap on smaller screens */
 }
 
-/* ── CHESS BOARD ──────────────────────────────────────────── */
-.board-wrap {
+/* Default Column Orders (Board -> Chat -> History) */
+.layout-col[data-col="board"]   { order: 1; }
+.layout-col[data-col="chat"]    { order: 2; }
+.layout-col[data-col="history"] { order: 3; }
+
+/* Layout Columns */
+.layout-col {
     display: flex;
     flex-direction: column;
+    gap: 12px;
+    transition: transform 0.2s, box-shadow 0.2s;
+}
+
+/* The Board Column */
+.board-wrap {
     flex-shrink: 0;
     width: min(512px, 100%);
+    flex: 1 1 min(512px, 100%);
+}
+
+/* The Chat and History Columns (formerly .game-sidebar) */
+.layout-col:not(.board-wrap) {
+    flex: 1 1 200px;
+    min-width: 200px;
+    max-width: 320px;
 }
 
 /* Coordinate labels */
@@ -449,14 +469,54 @@
     flex-shrink: 0;
 }
 
-/* ── GAME SIDEBAR ─────────────────────────────────────────── */
-.game-sidebar {
-    flex: 1;
-    min-width: 200px;
-    max-width: 280px;
+/* ── EDIT MODE (DRAG & DROP) ──────────────────────────────── */
+.drag-handle {
+    display: none;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    padding: 8px;
+    background: var(--bg-muted);
+    border: 1px dashed var(--border-default);
+    border-radius: var(--radius-md);
+    color: var(--fg-muted);
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: grab;
+    margin-bottom: -4px;
+}
+
+.board-container.edit-mode .drag-handle {
     display: flex;
-    flex-direction: column;
-    gap: 12px;
+}
+
+.board-container.edit-mode .layout-col {
+    position: relative;
+}
+
+.board-container.edit-mode .layout-col::before {
+    content: '';
+    position: absolute;
+    inset: -8px;
+    border: 2px dashed transparent;
+    border-radius: var(--radius-lg);
+    pointer-events: none;
+    z-index: 10;
+    transition: border-color 0.2s;
+}
+
+.board-container.edit-mode .layout-col:hover::before {
+    border-color: var(--border-muted);
+}
+
+.board-container.edit-mode .layout-col.dragging {
+    opacity: 0.5;
+    transform: scale(0.98);
+}
+
+.board-container.edit-mode .layout-col.drag-over::before {
+    border-color: var(--accent-emphasis);
+    background: rgba(9, 105, 218, 0.05);
 }
 
 .sidebar-card {
@@ -556,17 +616,11 @@
 
     .board-wrap {
         width: 100%;
-    }
-
-    .game-sidebar {
         max-width: none;
-        flex-direction: row;
-        flex-wrap: wrap;
     }
 
-    .game-sidebar .sidebar-card {
-        flex: 1;
-        min-width: 200px;
+    .layout-col:not(.board-wrap) {
+        max-width: none;
     }
 }
 
