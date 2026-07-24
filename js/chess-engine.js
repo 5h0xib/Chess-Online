@@ -83,6 +83,13 @@ function renderBoard(flipped = false) {
             chessboard.appendChild(square);
         }
     }
+    
+    // Highlight last move
+    if (gameState.moveHistory && gameState.moveHistory.length > 0) {
+        const lastMove = gameState.moveHistory[gameState.moveHistory.length - 1];
+        highlightLastMove(lastMove.from.row, lastMove.from.col, lastMove.to.row, lastMove.to.col);
+    }
+    
     updateGameStatusDisplay();
 }
 

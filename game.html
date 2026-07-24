@@ -99,19 +99,12 @@
                 </div>
                 <span class="pp-turn-badge" id="blackTurnBadge" style="display:none">Your Turn</span>
             </div>
-            
-            <!-- Edit Layout Button -->
-            <button class="btn btn-ghost" id="editLayoutBtn" title="Customize Layout" style="padding: 10px; border-radius: 50%; margin-left: auto;">
-                <i class="bi bi-sliders"></i>
-            </button>
         </div>
 
 
         <!-- Board + Sidebar -->
-        <div class="board-container" id="draggableLayout">
-            <!-- 1. Board Column -->
-            <div class="board-wrap layout-col" data-col="board" draggable="false">
-                <div class="drag-handle"><i class="bi bi-grip-horizontal"></i> Drag to move</div>
+        <div class="board-container">
+            <div class="board-wrap">
                 <div class="file-labels">
                     <span class="file-label">a</span><span class="file-label">b</span>
                     <span class="file-label">c</span><span class="file-label">d</span>
@@ -140,9 +133,8 @@
                 </div>
             </div>
 
-            <!-- 2. History & Controls Column -->
-            <div class="layout-col" data-col="history" draggable="false">
-                <div class="drag-handle"><i class="bi bi-grip-horizontal"></i> Drag to move</div>
+            <!-- Sidebar -->
+            <aside class="game-sidebar">
                 <div class="sidebar-card card">
                     <div class="section-header" style="margin-bottom:8px;">
                         <div class="section-title" style="font-size:0.85rem;">
@@ -162,28 +154,26 @@
                         <i class="bi bi-clock-history"></i> History
                     </a>
                 </div>
-            </div>
 
-            <!-- 3. Chat Column -->
-            <div class="sidebar-card card chat-card layout-col" id="gameChatCard" data-col="chat" style="display:none" draggable="false">
-                <div class="drag-handle"><i class="bi bi-grip-horizontal"></i> Drag to move</div>
-                <div class="chat-header">
-                    <i class="bi bi-chat-dots-fill"></i>
-                    <span>Game Chat</span>
-                </div>
-                <div class="chat-messages" id="chatMessagesList">
-                    <div class="chat-empty" id="chatEmpty">
-                        <i class="bi bi-chat-text" style="font-size:1.4rem;display:block;margin-bottom:6px;opacity:0.5;"></i>
-                        Send a message to your opponent
+                <div class="sidebar-card card chat-card" id="gameChatCard" style="display:none">
+                    <div class="chat-header">
+                        <i class="bi bi-chat-dots-fill"></i>
+                        <span>Game Chat</span>
+                    </div>
+                    <div class="chat-messages" id="chatMessagesList">
+                        <div class="chat-empty" id="chatEmpty">
+                            <i class="bi bi-chat-text" style="font-size:1.4rem;display:block;margin-bottom:6px;opacity:0.5;"></i>
+                            Send a message to your opponent
+                        </div>
+                    </div>
+                    <div class="chat-input-bar">
+                        <input type="text" id="chatInput" placeholder="Type a message…" autocomplete="off" maxlength="500">
+                        <button class="btn btn-primary btn-sm" id="chatSendBtn">
+                            <i class="bi bi-send-fill"></i>
+                        </button>
                     </div>
                 </div>
-                <div class="chat-input-bar">
-                    <input type="text" id="chatInput" placeholder="Type a message…" autocomplete="off" maxlength="500">
-                    <button class="btn btn-primary btn-sm" id="chatSendBtn">
-                        <i class="bi bi-send-fill"></i>
-                    </button>
-                </div>
-            </div>
+            </aside>
         </div>
 
     </main>
@@ -228,7 +218,6 @@
     <script src="js/notifications.js"></script>
     <script src="js/chess-engine.js"></script>
     <script src="js/chat.js"></script>
-    <script src="js/layout.js"></script>
     <script src="js/game.js"></script>
     <script src="js/theme.js"></script>
     <script>
