@@ -627,7 +627,10 @@ function formatMove(m) {
     if (!m) return '';
     const cols = ['a', 'b', 'c', 'd', 'e', 'f', 'g', 'h'];
     const rows = ['8', '7', '6', '5', '4', '3', '2', '1'];
-    return `${cols[m.from.col]}${rows[m.from.row]}–${cols[m.to.col]}${rows[m.to.row]}`;
+    const icon = (m.piece && PIECES[m.piece.color] && PIECES[m.piece.color][m.piece.type]) 
+                    ? `<span style="font-size:1.2em; line-height:1; vertical-align:middle; margin-right:2px;">${PIECES[m.piece.color][m.piece.type]}</span>` 
+                    : '';
+    return `${icon}${cols[m.from.col]}${rows[m.from.row]}–${cols[m.to.col]}${rows[m.to.row]}`;
 }
 
 // ===== LOCAL STORAGE =====
