@@ -1,5 +1,5 @@
 -- ============================================================
--- CHESS ONLINE – SUPABASE SCHEMA
+-- CHESS ONLINE – SUPABASE SCHEMA 
 -- Run this entire file in your Supabase SQL editor
 -- ============================================================
 
